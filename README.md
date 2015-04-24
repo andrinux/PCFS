@@ -1,5 +1,10 @@
 # UserFS: A Userspace File System Implementation 
-# Not Only Reinvent the Wheels... Actually... Everything has a starter.. :)
+
+
+Not Only Reinvent the Wheels... 
+Although it is what I am doing right now.
+
+:)
 
 
 ## Project Goals
