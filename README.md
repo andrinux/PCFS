@@ -16,8 +16,8 @@
 
 ##Related Work
 This work is inspired by the following outstanding projects:
-*[BtrFS](https://btrfs.wiki.kernel.org/index.php/Main_Page)
-*[gzip](http://www.gzip.org/)
+- [BtrFS](https://btrfs.wiki.kernel.org/index.php/Main_Page)
+- [gzip](http://www.gzip.org/)
 *[FUSE](http://fuse.sourceforge.net/)
 *[GoogleFuse](https://code.google.com/p/fusecompress/)
 *[Ext4Fuse] (https://github.com/gerard/ext4fuse)
