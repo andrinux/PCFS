@@ -22,6 +22,7 @@ Although it is what I am doing right now.
 ##Related Work
 This work is inspired by the following outstanding projects:
 - [BtrFS](https://btrfs.wiki.kernel.org/index.php/Main_Page)
+- [ZFS](https://github.com/zfsonlinux/zfs)
 - [gzip](http://www.gzip.org/)
 - [FUSE](http://fuse.sourceforge.net/)
 - [GoogleFuse](https://code.google.com/p/fusecompress/)
