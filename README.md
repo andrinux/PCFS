@@ -15,6 +15,7 @@ Although it is what I am doing right now.
 * More on the way... :)
 
 ##Technology
+It is pretty hard to debug a kernel space file system. So I decide to try a userspace one first and migrate it to kernel version.
 
 
 ##How did I do
