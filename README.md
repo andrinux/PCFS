@@ -26,7 +26,7 @@ This work is inspired by the following outstanding projects:
 - [ZFS](https://github.com/zfsonlinux/zfs)
 - [gzip](http://www.gzip.org/)
 - [FUSE](http://fuse.sourceforge.net/)
-- [GoogleFuse](https://code.google.com/p/fusecompress/)
+- [texFuse](https://github.com/tex/fusecompress)
 - [Ext4Fuse] (https://github.com/gerard/ext4fuse)
 - [Ext4](https://github.com/torvalds/linux/tree/master/fs/ext4)
 
