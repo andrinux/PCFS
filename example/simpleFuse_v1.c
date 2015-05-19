@@ -2,8 +2,6 @@
 //Author: XZ.
 //Only support 'ls' operations
 
-#define FUSE_USE_VERSION 26
-
 
 #include <stdio.h>
 #include <string.h>
