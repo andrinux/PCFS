@@ -1,6 +1,10 @@
 /*
   FUSE: Filesystem in Userspace
   Copyright (C) 2001-2007  Miklos Szeredi <miklos@szeredi.hu>
+  
+  Further edited by XZ.
+  
+  New added functions include 'write file'
 
   This program can be distributed under the terms of the GNU GPL.
   See the file COPYING.
