@@ -94,7 +94,7 @@ static struct fuse_operations hello_oper = {
 	.read		= hello_read,
 };
 
-int main(int argc, char *argv[])
+int main_2(int argc, char *argv[])
 {
 	return fuse_main(argc, argv, &hello_oper, NULL);
 }
