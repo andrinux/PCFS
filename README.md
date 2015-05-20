@@ -1,11 +1,12 @@
 # UserFS: A Userspace File System Implementation 
 
 
-Not Only Reinvent the Wheels... 
-Although it is what I am doing right now.
-
+TO Do some really interesting things...
 :)
 
+##News
+* May-14-2015: finish the framework, seems compressor module doesn't work well
+* May-03-2015: try to switch to FUSE, kernel module is not an easy thing
 
 ## Project Goals
 * Faster speed.
