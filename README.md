@@ -6,6 +6,7 @@ TO Do some really interesting things...
 
 ##News
 * May-14-2015: finish the framework, seems compressor module doesn't work well
+* May-**-2015: Majority of code is not uploaded.
 * May-03-2015: try to switch to FUSE, kernel module is not an easy thing
 
 ## Project Goals
