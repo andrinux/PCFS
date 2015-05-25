@@ -86,7 +86,8 @@ static int hello_read(const char *path, char *buf, size_t size, off_t offset,
 
 	return size;
 }
-
+//Set of operations in this version of FUSE
+//Read only
 static struct fuse_operations hello_oper = {
 	.getattr	= hello_getattr,
 	.readdir	= hello_readdir,
@@ -94,7 +95,7 @@ static struct fuse_operations hello_oper = {
 	.read		= hello_read,
 };
 
-int main_2(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	return fuse_main(argc, argv, &hello_oper, NULL);
 }

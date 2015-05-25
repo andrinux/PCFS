@@ -2,6 +2,7 @@
 //Author: XZ.
 //Only support 'ls' operations
 
+//gcc -Wall `pkg-config fuse --cflags --libs` -o hello simpleFuse_v1.c
 
 #include <stdio.h>
 #include <string.h>
