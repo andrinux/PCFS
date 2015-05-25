@@ -1,13 +1,16 @@
 //A simple Fuse implementation
 //Author: XZ.
 //Only support 'ls' operations
+/*
+gcc -Wall simpleFuse_v1.c -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  -pthread -L/usr/lib -lfuse -o hello 
+*/
+#define  FUSE_USE_VERSION 26
 
-//gcc -Wall `pkg-config fuse --cflags --libs` -o hello simpleFuse_v1.c
-
+#include <fuse.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <fuse.h>
+#include <errno.h>
+#include <fcntl.h>
 
 static int simple_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 							off_t offset, struct fuse_file_info* fi){
