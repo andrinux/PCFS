@@ -1,5 +1,8 @@
 # UserFS: A Userspace File System Implementation 
 
+A filesystem in which data and metadata are provided by an ordinary
+userspace process.  The filesystem can be accessed normally through
+the kernel interface.
 
 TO Do some really interesting things...
 :)
