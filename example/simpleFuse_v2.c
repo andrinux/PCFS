@@ -9,11 +9,10 @@
   This program can be distributed under the terms of the GNU GPL.
   See the file COPYING.
 
-  gcc -Wall hello.c `pkg-config fuse --cflags --libs` -o hello
+  gcc -Wall simpleFuse_v2.c `pkg-config fuse --cflags --libs` -o hello
 */
 
 #define FUSE_USE_VERSION 26
-
 #include <fuse.h>
 #include <stdio.h>
 #include <string.h>
@@ -22,6 +21,7 @@
 
 static const char *hello_str = "Hello World!\n";
 static const char *hello_path = "/hello";
+static const char *new_path = "/files";
 
 static int hello_getattr(const char *path, struct stat *stbuf)
 {
@@ -35,7 +35,11 @@ static int hello_getattr(const char *path, struct stat *stbuf)
 		stbuf->st_mode = S_IFREG | 0444;
 		stbuf->st_nlink = 1;
 		stbuf->st_size = strlen(hello_str);
-	} else
+	} else if(strcmp(path, new_path) == 0){
+		stbuf->st_mode = S_IFREG |0777;
+		stbuf->st_nlink = 1;
+		stbuf->st_size=strlen(new_path);
+	}else
 		res = -ENOENT;
 
 	return res;
@@ -53,6 +57,7 @@ static int hello_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 	filler(buf, hello_path + 1, NULL, 0);
+	filler(buf, new_path + 1, NULL, 0);
 
 	return 0;
 }
