@@ -1,4 +1,5 @@
 //use a global content buffer to store some data
+//Add functions to write and truncate content to an existing file
 
 #define FUSE_USE_VERSION 26
  
@@ -38,8 +39,8 @@ static int ou_read(const char* path, char* buf, size_t bytes, off_t offset,
                    struct fuse_file_info* fi)
 {
     size_t available;
- 
-    if (strcmp(path + 1, fname) != 0)
+    //path+1 indicates the string start from the second letter
+    if (strcmp(path + 1, fname) != 0) 
         return -ENOENT;
  
     if (offset >= content_size)
