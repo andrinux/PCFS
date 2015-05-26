@@ -1,4 +1,5 @@
 //gcc -Wall simpleFuse_v3.c `pkg-config fuse --cflags --libs` -o hello
+//Support functions to create and delete files
 
 #define FUSE_USE_VERSION 26
  
@@ -18,6 +19,11 @@
     struct list_node {
         struct list_node *prev, *next;
     };
+
+
+#define list_for_each(p, head) \
+    for ((p) = (head)->next; (p) != (head); (p) = (p)->next)
+
 */
 struct ou_entry {
     mode_t mode;
@@ -96,7 +102,7 @@ static int ou_create(const char* path, mode_t mode, struct fuse_file_info* fi)
  
     return 0;
 }
- 
+//Unlink is the function used to delete file in file system
 static int ou_unlink(const char* path)
 {
     struct list_node *n, *p;
