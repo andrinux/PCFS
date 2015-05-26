@@ -2,6 +2,8 @@
 //Author: XZ.
 //Only support 'ls' operations
 /*
+ Must put c file right after -Wall. Weird
+ 
 gcc -Wall simpleFuse_v1.c -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  -pthread -L/usr/lib -lfuse -o hello 
 */
 #define  FUSE_USE_VERSION 26
@@ -25,7 +27,7 @@ static int simple_getattr(const char* path, struct stat* st){
 		//the root directory
 		st->st_mode = 0755 | S_IFDIR;
 	}else{
-		st->st_mode = 0755 | S_IFREG;
+		st->st_mode = 0777 | S_IFREG;
 	}
 
 	return 0;
