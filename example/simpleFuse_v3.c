@@ -1,3 +1,5 @@
+//gcc -Wall simpleFuse_v3.c `pkg-config fuse --cflags --libs` -o hello
+
 #define FUSE_USE_VERSION 26
  
 #include <stdio.h>
@@ -9,7 +11,14 @@
 #include "list.h"
  
 #define MAX_NAMELEN 255
- 
+
+//This is the denotation of a file ertry
+//includes a mode, a linked list position, a name
+/*
+    struct list_node {
+        struct list_node *prev, *next;
+    };
+*/
 struct ou_entry {
     mode_t mode;
     struct list_node node;

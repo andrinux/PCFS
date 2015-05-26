@@ -1,8 +1,8 @@
 /*
-  FUSE: Filesystem in Userspace
-  Copyright (C) 2001-2007  Miklos Szeredi <miklos@szeredi.hu>
+
+  //The exaple hello program
   
-  Further edited by XZ.
+  Edited by XZ.
   
   New added functions include 'write file'
 

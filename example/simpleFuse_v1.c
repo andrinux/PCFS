@@ -6,7 +6,9 @@
  
 gcc -Wall simpleFuse_v1.c -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  -pthread -L/usr/lib -lfuse -o hello 
 */
+#ifndef FUSE_USE_VERSION
 #define  FUSE_USE_VERSION 26
+#endif
 
 #include <fuse.h>
 #include <stdio.h>
