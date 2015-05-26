@@ -5,8 +5,8 @@ TO Do some really interesting things...
 :)
 
 ##News
+* May-24-2015: Create a new file(touch) without compression
 * May-14-2015: finish the framework, seems compressor module doesn't work well
-* May-**-2015: Majority of code is not uploaded.
 * May-03-2015: try to switch to FUSE, kernel module is not an easy thing
 
 ## Project Goals
@@ -29,7 +29,7 @@ This work is inspired by the following outstanding projects:
 - [gzip](http://www.gzip.org/)
 - [FUSE](http://fuse.sourceforge.net/)
 - [texFuse](https://github.com/tex/fusecompress)
-- [Ext4Fuse] (https://github.com/gerard/ext4fuse)
+- [Ext4Fuse](https://github.com/gerard/ext4fuse)
 - [Ext4](https://github.com/torvalds/linux/tree/master/fs/ext4)
 
 ##Can I ask questions?
