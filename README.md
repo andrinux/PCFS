@@ -1,8 +1,11 @@
 # UserFS: A Userspace File System Implementation 
- ____   ___  ___  ___               
-|  _,\ / __|| __|/ __|              The PageLevel Compression File System
-|  __/  (__ | _| \__ \              A no-overhead transparent compression   
-|_|    \___||_|  |___/              https://github.com/andrinux/UserFS             
+
+~~~~~~~
+   ____   ___  ___  ___               
+ |  _,\ / __|| __|/ __|              The PageLevel Compression File System
+ |  __/  (__ | _| \__ \              A no-overhead transparent compression   
+ |_|    \___||_|  |___/              https://github.com/andrinux/UserFS    
+~~~~~~         
 
 A filesystem in which data and metadata are provided by an ordinary
 userspace process.  The filesystem can be accessed normally through
