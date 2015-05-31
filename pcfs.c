@@ -44,12 +44,14 @@ static struct fuse_operations PCFS_Oper = {
 
 
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 	int fusec = 0;
-	char *fusev[argc, MAX_OPT];
+	char* fusev[argc, MAX_OPT];
 	char *root = NULL;
+	int ret;
 
-	ret=fuse_main(fusec, fusev, &PCFS_oper, NULL);
+	ret=fuse_main(fusec, fusev, &PCFS_Oper, NULL);
+	return ret;
 }
 
