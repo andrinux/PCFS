@@ -17,6 +17,27 @@
 
 static char DOT = '.';
 
+static int fusecompress_read(const char *path, char *buf, size_t size, 
+                        off_t offset, struct fuse_file_info *fi)
+{
+    int           res;
+    file_t       *file;
+    descriptor_t *descriptor;
+
+    return res;
+}
+
+//Structure of write/read should be similar to each other
+static int fusecompress_write(const char *path, const char *buf, size_t size,
+                          off_t offset, struct fuse_file_info *fi)
+{
+    int res; //the return value
+    file_t       *file;
+    descriptor_t *descriptor;
+
+    return res;
+}
+
 static struct fuse_operations PCFS_Oper = {
     .getattr	= PCFS_getattr,
     .readlink	= PCFS_readlink,
