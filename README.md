@@ -2,7 +2,7 @@
 
 ~~~~~~~              
   ____    ___   ___   ___               
- |  _ \  / __| | __| / __|              The PageLevel Compression File System
+ |  _ \  / __| | __| / __|              The P        Compression File System
  |  __/ ( (__  | _|  \__ \              A no-overhead transparent compression   
  |_|     \___| |_|   |___/              https://github.com/andrinux/UserFS    
 ~~~~~~                
@@ -15,6 +15,8 @@ TO Do some really interesting things...
 :)
 
 ##News
+* Jun-03-2015: Use zlib to do the compression/decompression R/W
+* Jun-01-2015: Store the flags/indicators in the file header
 * May-24-2015: Create a new file(touch) without compression
 * May-14-2015: finish the framework, seems compressor module doesn't work well
 * May-03-2015: try to switch to FUSE, kernel module is not an easy thing
