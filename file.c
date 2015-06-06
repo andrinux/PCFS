@@ -39,5 +39,39 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
 }
 
 
+/**
+ * Returns type of compression and real size of the file if file is compressed.
+ * If the header is invalid, the size will not be touched, and the compressor
+ * will be set to NULL.
+ *
+ * @param fd
+ * @param **compressor
+ * @param *size
+ *
+ * @return  0 - compressor and size assigned or invalid header
+ *         -1 - file i/o error
+ */
+int file_read_header_fd(int fd, compressor_t **compressor, off_t *size)
+{
+	int           r;
+	header_t      fh;
 
+	assert(fd >= 0);
+	assert(compressor);
+	assert(size);
+
+	DEBUG_("reading header from %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
+	r = read(fd, &fh, sizeof(fh));
+	if (r == -1)
+		return r;
+
+	if (r == sizeof(fh))
+	{
+		fh.size = from_le64(fh.size);
+		*compressor = file_compressor(&fh);
+		if (*compressor)
+			*size       = fh.size;
+	}
+	return 0;
+}
 
