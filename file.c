@@ -75,3 +75,20 @@ int file_read_header_fd(int fd, compressor_t **compressor, off_t *size)
 	return 0;
 }
 
+
+
+
+inline void file_close(int *fd)
+{
+	assert(fd);
+	assert(*fd > FAIL);
+
+	if (close(*fd) == -1)
+	{
+		CRIT_("Failed to close fd!");
+		//exit(EXIT_FAILURE);
+	};
+
+	*fd = -1;
+}
+
