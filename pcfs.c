@@ -87,6 +87,124 @@ static int PCFS_mknod(const char *path, mode_t mode, dev_t rdev)
 	return ret;
 }
 
+static int PCFS_open(const char *path, struct fuse_file_info *fi)
+{
+	int            res;
+	const char    *full;
+	struct stat    statbuf;
+	file_t        *file;
+	descriptor_t  *descriptor;
+	
+	full = fusecompress_getpath(path);
+
+	DEBUG_("('%s')", full);
+	STAT_(STAT_OPEN);
+
+	descriptor = (descriptor_t *) malloc(sizeof(descriptor_t));
+	if (!descriptor)
+	{
+		CRIT_("\tno memory");
+		//exit(EXIT_FAILURE);
+		return -ENOMEM;
+	}
+
+	file = direct_open(full, TRUE);
+
+	// if user wants to open file in O_WRONLY, we must open file for reading too
+	// (we need to read header...)
+	//
+	if (fi->flags & O_WRONLY)
+	{
+		fi->flags &= ~O_WRONLY;		// remove O_WRONLY flag
+		fi->flags |=  O_RDWR;		// add O_RDWR flag
+	}
+	if (fi->flags & O_APPEND)
+	{
+		// TODO: Some inteligent append handling...
+		//
+		// Note: fusecompress_write is called with offset to the end of
+		//       file - this is fuse/kernel part of work...
+		//
+		fi->flags &= ~O_APPEND;
+	}
+	
+
+	descriptor->fd = file_open(full, fi->flags);
+	if (descriptor->fd == FAIL)
+	{
+		UNLOCK(&file->lock);
+		free(descriptor);	// This is safe, because this descriptor has
+					// not yet been added to the database entry
+		return -errno;
+	}
+	DEBUG_("\tfd: %d", descriptor->fd);
+
+	res = fstat(descriptor->fd, &statbuf);
+	if (res == -1)
+	{
+		CRIT_("\tfstat failed after open was ok");
+		//exit(EXIT_FAILURE);
+		return -errno;
+	}
+	
+	if(S_ISREG(statbuf.st_mode) && statbuf.st_nlink > 1) {
+		file->dontcompress = TRUE;
+	}
+
+	DEBUG_("\tsize on disk: %zi", statbuf.st_size);
+
+	if (statbuf.st_size >= sizeof(header_t))
+	{
+		res = file_read_header_fd(descriptor->fd, &file->compressor, &statbuf.st_size);
+		if (res == FAIL)
+		{
+			CRIT_("\tfile_read_header_fd failed");
+			//exit(EXIT_FAILURE);
+			return -EIO;
+		}
+	}
+	else
+	{
+		// File has size smaller than size of header, set compressor to NULL as
+		// default. Compressor method will be selected when write happens.
+		//
+		file->compressor = NULL;
+	}
+
+	DEBUG_("\topened with compressor: %s, uncompressed size: %zd, fd: %d",
+		file->compressor ? file->compressor->name : "null",
+		statbuf.st_size, descriptor->fd);
+
+	descriptor->file = file;
+	descriptor->offset = 0;
+	descriptor->handle = NULL;
+	file->accesses++;
+
+	// The file size has to be -1 (invalid) or the same as we think it is
+	//
+	DEBUG_("\tfile->size: %zi", file->size);
+
+	// Cannot be true (it is not implemented) if writing to
+	// noncompressible file or into rollbacked file...
+	//
+	// assert((file->size == (off_t) -1) ||
+	//        (file->size == statbuf.st_size));
+	//
+	file->size = statbuf.st_size;
+
+	// Add ourself to the database's list of open filedata
+	//
+	list_add(&descriptor->list, &file->head);
+
+	// Set descriptor in fi->fh
+	//
+	fi->fh = (long) descriptor;
+
+	UNLOCK(&file->lock);
+
+	return 0;
+}
+
 
 static int PCFS_read(const char *path, char *buf, size_t size, 
                         off_t offset, struct fuse_file_info *fi)
