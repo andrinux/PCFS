@@ -60,6 +60,34 @@ static int PCFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	return 0;
 }
 
+static int PCFS_mknod(const char *path, mode_t mode, dev_t rdev)
+{
+	int ret = 0;
+	const char *full;
+	uid_t uid;
+	gid_t gid;
+	struct fuse_context *fc;
+	file_t     *file;
+
+	full = fusecompress_getpath(path);
+
+	DEBUG_("('%s') mode 0%o rdev 0x%x", full, mode, (unsigned int)rdev);
+
+	file = direct_open(full, TRUE);
+
+	fc = fuse_get_context();
+
+	if (mknod(full, mode, rdev) == -1) {
+		ret = -errno;
+	}
+
+	UNLOCK(&file->lock);
+
+
+	return ret;
+}
+
+
 static int PCFS_read(const char *path, char *buf, size_t size, 
                         off_t offset, struct fuse_file_info *fi)
 {
