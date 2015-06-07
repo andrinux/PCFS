@@ -255,11 +255,24 @@ static int PCFS_read(const char *path, char *buf, size_t size,
 //Structure of write/read should be similar to each other
 static int PCFS_write(const char *path, const char *buf, size_t size,
                           off_t offset, struct fuse_file_info *fi)
-{
-    int res; //the return value
-    file_t       *file;
-    descriptor_t *descriptor;
+{	
+	int           res;
+	file_t       *file;
+	descriptor_t *descriptor;
 
+	DEBUG_("('%s') size: %zd, offset: %zd", path, size, offset);
+	STAT_(STAT_WRITE);
+
+	descriptor = (descriptor_t *) fi->fh;
+	assert(descriptor);
+
+	file = descriptor->file;
+	assert(file);
+
+	LOCK(&file->lock);
+	//TODO...
+	
+	
     return res;
 }
 
