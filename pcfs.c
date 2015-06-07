@@ -210,10 +210,46 @@ static int PCFS_read(const char *path, char *buf, size_t size,
                         off_t offset, struct fuse_file_info *fi)
 {
     int           res;
-    file_t       *file;
-    descriptor_t *descriptor;
+	file_t       *file;
+	descriptor_t *descriptor;
 
-    return res;
+	DEBUG_("('%s') size: %zd, offset: %zd", path, size, offset);
+	STAT_(STAT_READ);
+
+	descriptor = (descriptor_t *) fi->fh;
+	assert(descriptor);
+
+	file = descriptor->file;
+	assert(file);
+
+	LOCK(&file->lock);
+
+	if (file->compressor)
+	{
+		res = direct_decompress(file, descriptor, buf, size, offset);
+		UNLOCK(&file->lock);
+	}
+	else
+	{
+		int fd = descriptor->fd;
+		UNLOCK(&file->lock);
+		res = pread(fd, buf, size, offset);
+	}
+
+	if (res == FAIL)
+	{
+		res = -errno;
+
+		// Read failed, invalidate file size in database. Right value will
+		// be acquired later if needed.
+		//
+		/* XXX: locking? */
+		file->size = -1;
+	}
+
+//	sched_yield();
+	DEBUG_("returning %d",res);
+	return res;
 }
 
 //Structure of write/read should be similar to each other
