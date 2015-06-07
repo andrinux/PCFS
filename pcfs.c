@@ -23,6 +23,43 @@ static int PCFS_getattr(const char *path, struct stat *stbuf)
     
     return res;
 }
+
+static int PCFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
+		       off_t offset, struct fuse_file_info *fi)
+{
+	const char    *full;
+	DIR           *dp;
+	struct dirent *de;
+
+	full = fusecompress_getpath(path);
+
+	dp = opendir(full);
+	if (dp == NULL)
+		return -errno;
+
+	while ((de = readdir(dp)) != NULL)
+	{
+		struct stat st;
+
+		/* ignore FUSE temporary files */
+		if (strstr(de->d_name, FUSE))
+			continue;
+		
+		/* ignore internal use files */
+		if (!strncmp(de->d_name, FUSECOMPRESS_PREFIX, sizeof(FUSECOMPRESS_PREFIX) - 1))
+			continue;
+
+		memset(&st, 0, sizeof(st));
+		st.st_ino = de->d_ino;
+		st.st_mode = de->d_type << 12;
+		if (filler(buf, de->d_name, &st, 0))
+			break;
+	}
+
+	closedir(dp);
+	return 0;
+}
+
 static int PCFS_read(const char *path, char *buf, size_t size, 
                         off_t offset, struct fuse_file_info *fi)
 {
@@ -43,6 +80,8 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 
     return res;
 }
+
+
 
 static struct fuse_operations PCFS_Oper = {
     .getattr	= PCFS_getattr,
