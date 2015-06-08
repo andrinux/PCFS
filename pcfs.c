@@ -277,6 +277,19 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 }
 
 
+static int PCFS_statfs(const char *path, struct statvfs *stbuf)
+{
+	int         res;
+	const char *full;
+
+	full = PCFS_getpath(path);
+
+	res = statvfs(full, stbuf);
+	if(res == -1)
+		return -errno;
+
+	return 0;
+}
 
 static struct fuse_operations PCFS_Oper = {
     .getattr	= PCFS_getattr,
