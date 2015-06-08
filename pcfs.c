@@ -283,7 +283,17 @@ static inline const char* PCFS_getpath(const char *path)
 	return ++path;
 }
 
-
+static int PCFS_truncate(const char *path, off_t size)
+{
+	int         ret = 0;
+	const char *full;
+	file_t     *file;
+	int fd;
+	
+	//TODO.....
+	
+	return ret;
+}
 static int PCFS_statfs(const char *path, struct statvfs *stbuf)
 {
 	int         res;
