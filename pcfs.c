@@ -276,6 +276,13 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
     return res;
 }
 
+static inline const char* PCFS_getpath(const char *path)
+{
+	if (path[1] == 0)
+		return &DOT;
+	return ++path;
+}
+
 
 static int PCFS_statfs(const char *path, struct statvfs *stbuf)
 {
