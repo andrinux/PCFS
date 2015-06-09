@@ -2,9 +2,9 @@
 
 ~~~~~~~              
   ____    ___   ___   ___               
- |  _ \  / __| | __| / __|              The P        Compression File System
+ |  _ \  / __| | __| / __|              The Page-level Compression File System
  |  __/ ( (__  | _|  \__ \              A no-overhead transparent compression   
- |_|     \___| |_|   |___/              https://github.com/andrinux/UserFS    
+ |_|     \___| |_|   |___/              https://github.com/andrinux/PCFS   
 ~~~~~~                
 
 A filesystem in which data and metadata are provided by an ordinary
@@ -15,6 +15,7 @@ TO Do some really interesting things...
 :)
 
 ##News
+* Jun-08-2015: Finish the writing module
 * Jun-03-2015: Use zlib to do the compression/decompression R/W
 * Jun-01-2015: Store the flags/indicators in the file header
 * May-24-2015: Create a new file(touch) without compression
