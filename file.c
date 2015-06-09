@@ -109,7 +109,9 @@ int file_open(const char *filename, int mode)
 		{
 			return FAIL;
 		}
-	} else { DEBUG_("fail"); }
+	} 
+	else
+		{ DEBUG_("fail"); }
 	return fd;
 }
 
