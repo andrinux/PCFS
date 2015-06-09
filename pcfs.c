@@ -15,13 +15,79 @@
 #include <ctype.h>
 #include <limits.h>
 
+#include "log.h"
+#include "compress.h"
+#include "file.h"
+
+
+
 static char DOT = '.';
 
 static int PCFS_getattr(const char *path, struct stat *stbuf)
 {
-    int res;
-    
-    return res;
+    int           res;
+	const char   *full;
+	file_t       *file;
+
+	full = fusecompress_getpath(path);
+
+	DEBUG_("('%s')", full);
+
+	/* check for magic file */
+	if (full[0] == '_' && full[1] == 'f' && full[2] == 'c') {
+
+			return -EINVAL;
+	}
+
+		res = lstat(full, stbuf);
+
+	if (res == FAIL)
+	{
+		return -errno;
+	}
+
+	// For non-regular files return now.
+	//
+	if (!S_ISREG(stbuf->st_mode))
+	{
+		return 0;
+	}
+
+	// TODO: Move direct_open before lstat
+	//
+	file = direct_open(full, FALSE);
+
+	// Invalid file->size: correct value may be in stbuf->st_size
+	// if file is uncompressed or in header if it is compressed.
+	//
+	if ((file->size == (off_t) -1))
+	{
+		// No need to read header if file is smaller then header.
+		//
+		if (stbuf->st_size >= sizeof(header_t))
+		{
+			res = file_read_header_name(full, &file->compressor, &stbuf->st_size);
+			if (res == FAIL)
+			{
+				UNLOCK(&file->lock);
+				return -errno;
+			}
+		}
+		file->size = stbuf->st_size;
+	}
+	else
+	{
+		// Only if a file is compressed, real uncompressed file size
+		// is in file->size
+		//
+		if (file->compressor)
+		{
+			stbuf->st_size = file->size;
+		}
+	}
+
+	UNLOCK(&file->lock);
+	return 0;
 }
 
 static int PCFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
