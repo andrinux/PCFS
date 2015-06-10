@@ -53,3 +53,16 @@ static off_t nullCompress(void *cancel_cookie, int fd_source, int fd_dest)
 
 	return size;
 }
+
+compressor_t module_null = {
+	.type = 0x00,
+	.name = "null",
+	.compress = nullCompress,
+	.decompress = nullDecompress,
+	.open = (void *(*) (int fd, const char *mode)) nullOpen,
+	.write = (int (*)(void *file, void *buf, unsigned int len)) write,
+	.read = (int (*)(void *file, void *buf, unsigned int len)) read,
+	.close = (int (*)(void *file)) close,
+};
+
+
