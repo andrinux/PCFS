@@ -96,3 +96,54 @@ static off_t gzCompress(void *cancel_cookie, int fd_source, int fd_dest)
 	
 	return size;
 }
+
+
+/**
+ * Decompress data from fd_source into fd_dest.
+ *
+ * @param fd_source	Source file descriptor
+ * @param fd_dest	Destination file descriptor
+ * @return 		Number of bytes written to fd_dest or (off_t)-1 on error
+ */
+static off_t gzDecompress(int fd_source, int fd_dest)
+{
+	int wr;
+	int rd;
+	char buf[BUF_SIZE];
+	off_t size = 0;
+	gzFile fd_gz;
+	int dup_fd;
+
+	dup_fd = dup(fd_source);
+	if (dup_fd == -1)
+	{
+		return (off_t) FAIL;
+	}
+
+	fd_gz = gzdopen(dup_fd, "rb");
+	if (fd_gz == NULL)
+	{
+		file_close(&dup_fd);
+		return (off_t) FAIL;
+	}
+
+	while ((rd = gzread(fd_gz, buf, BUF_SIZE)) > 0)
+	{
+		wr = write(fd_dest, buf, rd);
+		if(wr == -1)
+		{
+			gzClose(fd_gz);
+			return (off_t) FAIL;
+		}
+		size += wr;
+	}
+
+	if (rd == -1)
+	{
+		gzClose(fd_gz);
+		return (off_t) FAIL;
+	}
+	
+	gzClose(fd_gz);
+	return size;
+}

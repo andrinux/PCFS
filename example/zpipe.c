@@ -20,7 +20,7 @@
 #if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
 #  include <fcntl.h>
 #  include <io.h>
-#  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+#  define SET_BINARY    _MODE(file) setmode(fileno(file), O_BINARY)
 #else
 #  define SET_BINARY_MODE(file)
 #endif
@@ -176,7 +176,7 @@ void zerr(int ret)
 int main(int argc, char **argv)
 {
     int ret;
-
+    
     /* avoid end-of-line conversions */
     SET_BINARY_MODE(stdin);
     SET_BINARY_MODE(stdout);
