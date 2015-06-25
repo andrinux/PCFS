@@ -379,24 +379,14 @@ static struct fuse_operations PCFS_Oper = {
     .readlink	= PCFS_readlink,
     .readdir	= PCFS_readdir,
     .mknod	= PCFS_mknod,
-    .mkdir	= PCFS_mkdir,
-    .symlink	= PCFS_symlink,
-    .unlink	= PCFS_unlink,
-    .rmdir	= PCFS_rmdir,
-    .rename	= PCFS_rename,
-    .link	= PCFS_link,
-    .chmod	= PCFS_chmod,
-    .chown	= PCFS_chown,
     .truncate	= PCFS_truncate,
     .utime	= PCFS_utime,
     .open	= PCFS_open,
     .read	= PCFS_read,
     .write	= PCFS_write,
     .statfs	= PCFS_statfs,
-    .release	= PCFS_release,
-    .fsync	= PCFS_fsync,
     .init       = PCFS_init,
-    .destroy    = PCFS_destroy,
+
 };
 
 
