@@ -50,6 +50,15 @@ typedef struct {
 	struct list_head list;
 } FILE;
 
+typedef struct
+{
+	char id[3];			// Special ID contains Compression info
+	unsigned char type;	//  compression module
+	off_t size;			// Size in uncompressed domain.
+
+} header_t;
+
+
 
 
 #endif
