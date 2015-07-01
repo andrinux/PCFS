@@ -1,5 +1,6 @@
 /*
 * Core file of PCFS: Pagelevel Compression File System
+* This is the core file containing the implementations of callback functions.
 * Author: XZ
 */
 
