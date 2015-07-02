@@ -38,6 +38,10 @@ typedef struct {
 } file_t;
 
 
+/*
+* Descriptor of A file.
+*/
+
 typedef struct {
 	file_t		*file;		// link back to file_t, can't be free'd until accesses = 0
 
