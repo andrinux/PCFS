@@ -1,7 +1,7 @@
 /*
 * Core file of PCFS: Pagelevel Compression File System
 * This is the core file containing the implementations of callback functions.
-* Author: XZ
+* Each Functions must be fully implemented.
 */
 
 #define FUSE_USE_VERSION 26

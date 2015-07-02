@@ -37,12 +37,16 @@ void testCompress()
 	int nchar = 0;
 	//DATA_BUFFER is used to store the compressed data.
 	//BUFFER is used to store the 4KB data read from original file.
-	while((nchar = read(fin, BUFFER, LEN))>0){
+	int i = 0;
+    while((nchar = read(fin, BUFFER, LEN))>0){
 		uLong dst_len = LEN;
 		Bytef* dst=(Bytef*) DATA_BUFFER;
 		if (Z_OK == compress(dst, &dst_len, (Bytef*)BUFFER, (uLong) LEN)){
 			write(fout, DATA_BUFFER, dst_len);
-			printf("%ld, ", dst_len);
+			printf("%ld-, ", dst_len);
+            i++;
+            if(i % 10 == 0) 
+                printf("\n");
 			memset(DATA_BUFFER, 0, sizeof(DATA_BUFFER));
 			memset(BUFFER, 0, sizeof(BUFFER));
 		}

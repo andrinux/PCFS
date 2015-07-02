@@ -20,7 +20,7 @@ typedef struct {
 
 	int		 		deleted;	/**< Boolean, if set file no longer exists */
 	int		 		accesses;	/**< Number of accesses to this file (number of descriptor_t in
-					     the `list` */
+					    		the `list` */
 	off_t		 	size;		/**< Filesize, if 0 then not read */
 	compressor_t	*compressor;	/**< NULL if file isn't compressed */
 	off_t		 	skipped;	/**< Number of bytes read and discarded while seeking */

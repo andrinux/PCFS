@@ -50,8 +50,8 @@ typedef struct {
 	int		 type;
 	int		 status;
 	
-    int              flag[ M ];
-    int              sequ[ M ];
+    size_t     flag[ M ];
+    size_t     sequ[ M ];
 	
 	int		 errors_reported;	/**< Number of errors reported for this file */
     
