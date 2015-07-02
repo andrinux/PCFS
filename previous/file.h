@@ -1,6 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 
+#define M 32
+
 typedef struct
 {
 	char type;		// ID of compression module
@@ -34,7 +36,6 @@ typedef struct
 
 typedef struct {
 	char		*filename;
-	unsigned int	 filename_hash;
 
 	ino_t		 ino;		/**< inode */
 	nlink_t		 nlink;		/**< number if hard links */
@@ -48,15 +49,12 @@ typedef struct {
 	int		 dontcompress;
 	int		 type;
 	int		 status;
-	int		 deduped;	/**< File has been deduplicated. */
 	
-	void**           cache;
-	int              cache_size;
+    int              flag[ M ];
+    int              sequ[ M ];
 	
 	int		 errors_reported;	/**< Number of errors reported for this file */
-
-	pthread_mutex_t	lock;
-	pthread_cond_t cond;
+    
 
 	struct list_head	head;	/**< Head of descriptor_t. This is needed
 					     because truncate has to close all active fd's
