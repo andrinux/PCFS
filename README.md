@@ -11,7 +11,7 @@ A filesystem in which data and metadata are provided by an ordinary
 userspace process.  The filesystem can be accessed normally through
 the kernel interface.
 
-TO Do some really interesting things...
+TO Do some really interesting things which has some impact...
 :)
 
 ##News
@@ -30,7 +30,9 @@ TO Do some really interesting things...
 * More on the way... :)
 
 ##Technology
-It is pretty hard to debug a kernel space file system. So I decide to try a userspace one first and migrate it to kernel version.
+It is pretty hard to debug a kernel space file system. 
+So I decide to try a userspace one first and migrate it to kernel version.
+Actually, migrating to Kernel is always necessary.
 
 
 ##How did I do
