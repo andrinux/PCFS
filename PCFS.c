@@ -34,6 +34,21 @@ static int PCFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 static int PCFS_open(const char *path, struct fuse_file_info *fi)
 {
+	int            res;
+	const char    *full;
+	struct stat    statbuf;
+	file_t        *file;
+	descriptor_t  *descriptor;
+	
+	full = fusecompress_getpath(path);
+
+	DEBUG_("('%s')", full);
+	descriptor = (descriptor_t *) malloc(sizeof(descriptor_t));
+	if (!descriptor){
+		CRIT_("\tno memory");
+		return -ENOMEM;
+	}
+	
 	return 0;
 }
 
