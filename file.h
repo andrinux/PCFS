@@ -12,23 +12,23 @@
 
 
 typedef struct {
-	char			*filename;
-	unsigned int	 filename_hash;
+	char*		filename;
+	unsigned int	filename_hash;
 
-	ino_t		 	ino;		/**< inode */
-	nlink_t		 	nlink;		/**< number if hard links */
+	ino_t		ino;		/**< inode */
+	nlink_t		nlink;		/**< number if hard links */
 
-	int		 		deleted;	/**< Boolean, if set file no longer exists */
-	int		 		accesses;	/**< Number of accesses to this file (number of descriptor_t in
+	int		deleted;	/**< Boolean, if set file no longer exists */
+	int		accesses;	/**< Number of accesses to this file (number of descriptor_t in
 					    		the `list` */
-	off_t		 	size;		/**< Filesize, if 0 then not read */
-	compressor_t	*compressor;	/**< NULL if file isn't compressed */
-	off_t		 	skipped;	/**< Number of bytes read and discarded while seeking */
-	int		 		dontcompress;
-	int		 		type;
-	int		 		status;
+	off_t		size;		/**< Filesize, if 0 then not read */
+	compressor_t*	compressor;	/**< NULL if file isn't compressed */
+	off_t		skipped;	/**< Number of bytes read and discarded while seeking */
+	int		dontcompress;
+	int		type;
+	int		status;
 	
-	int		 		 errors_reported;	/**< Number of errors reported for this file */
+	int		errors_reported;	/**< Number of errors reported for this file */
 
 
 	struct list_head	head;	/**< Head of descriptor_t. This is needed
@@ -56,9 +56,9 @@ typedef struct {
 
 typedef struct
 {
-	char id[3];			// Special ID contains Compression info
-	unsigned char type;	//  compression module
-	off_t size;			// Size in uncompressed domain.
+	char 		id[3];			// Special ID contains Compression info
+	unsigned char	type;	//  compression module
+	off_t 		size;			// Size in uncompressed domain.
 
 } header_t;
 
