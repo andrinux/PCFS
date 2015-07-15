@@ -39,16 +39,6 @@ int do_decompress(file_t *file)
 	DEBUG_("('%s')", file->filename);
 	STAT_(STAT_DECOMPRESS);
 
-	DEBUG_("file size %zd",file->size);
-	struct statvfs stat;
-	if(statvfs(file->filename, &stat) < 0)
-		return FALSE;
-	if(stat.f_bsize * stat.f_bavail < file->size) {
-		if(!(geteuid() == 0 && stat.f_bsize * stat.f_bfree >= file->size)) {
-			errno = ENOSPC;
-			return FALSE;
-		}
-	}
 
 	flush_file_cache(file);
 	
