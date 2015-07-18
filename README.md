@@ -36,9 +36,12 @@ Actually, migrating to Kernel is always necessary.
 
 
 ##How did I do
-- Add extra information on the metadata of data blocks
-- Use CPU to do the compression/decompression
-- 
+* Add extra information on the metadata of data blocks
+* Use CPU to do the compression/decompression
+ 
+
+
+
 ##Related Work
 This work is inspired by the following outstanding projects:
 - [BtrFS](https://btrfs.wiki.kernel.org/index.php/Main_Page)
