@@ -67,9 +67,57 @@ if test x$enable_zlib != xno ; then
            AC_DEFINE(HAVE_ZLIB,1,[Compiling with DEFLATE support])
         fi
 fi
+#if test x$enable_bzip2 != xno ; then
+	#AC_CHECK_HEADER(bzlib.h,have_bzip2_hdr=yes)
+        #AC_CHECK_LIB(bz2,BZ2_bzwrite,have_bzip2_lib=yes)
+        #if test x$have_bzip2_hdr == xyes -a x$have_bzip2_lib == xyes ; then
+           have_bzip2=no
+           #LIBS="$LIBS -lbz2"
+           #AC_DEFINE(HAVE_BZIP2,0,[Compiling with BZip2 support])
+        #fi
+#fi
+if test x$enable_lzma != xno ; then
+	#AC_CHECK_HEADER(lzma.h,have_lzma_hdr=yes)
+        #AC_CHECK_LIB(lzma,lzma_code, have_lzma_lib=yes)
+        #if test x$have_lzma_hdr == xyes -a x$have_lzma_lib == xyes ; then
+           have_lzma=no
+           #LIBS="$LIBS -llzma"
+           #AC_DEFINE(HAVE_LZMA,0,[Compiling with LZMA support])
+        #fi
+fi
+if test x$enable_lzo != xno ; then
+	#AC_CHECK_HEADER(lzo/lzo1x.h,have_lzo_hdr=yes)
+        #AC_CHECK_LIB(lzo2,lzo1x_1_compress,have_lzo_lib=yes)
+        #if test x$have_lzo_hdr == xyes -a x$have_lzo_lib == xyes ; then
+           have_lzo=no
+           #LIBS="$LIBS -llzo2"
+           #AC_DEFINE(HAVE_LZO2,0,[Compiling with LZO support])
+        #fi
+fi
+if test x$enable_dedup == xyes ; then
+	#AC_CHECK_HEADER(mhash.h,have_mhash_hdr=yes,AC_MSG_ERROR([mhash header files not found]))
+	#AC_CHECK_LIB(mhash,mhash_init,have_mhash_lib=yes,AC_MSG_ERROR([no suitable libmhash found]))
+	#if test x$have_mhash_hdr == xyes -a x$have_mhash_lib == xyes ; then
+	   have_mhash=no
+	   #LIBS="$LIBS -lmhash"
+	  # AC_DEFINE(HAVE_MHASH,0,[Compiling with MHASH support])
+	#fi
+fi
 
-AM_CONDITIONAL(DEBUG, test x$enable_debug == xyes)
+#AM_CONDITIONAL(DEBUG, test x$enable_debug == xyes)
+AM_CONDITIONAL(DEBUG, test true)
 AM_CONDITIONAL(HAVE_ZLIB, test x$have_zlib == xyes)
+#AM_CONDITIONAL(HAVE_BZIP2, test x$have_bzip2 == xyes)
+#AM_CONDITIONAL(HAVE_LZMA, test x$have_lzma == xyes)
+#AM_CONDITIONAL(HAVE_LZO2, test x$have_lzo == xyes)
+#AM_CONDITIONAL(HAVE_MHASH, test x$have_mhash == xyes)
+#AM_CONDITIONAL(DEDUP, test x$enable_dedup == xyes)
+
+#AM_CONDITIONAL(HAVE_BZIP2, test 0)
+#AM_CONDITIONAL(HAVE_LZMA, test 0)
+#AM_CONDITIONAL(HAVE_LZO2, test 0)
+#AM_CONDITIONAL(HAVE_MHASH, test 0)
+#AM_CONDITIONAL(DEDUP, test 0)
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 PKG_CHECK_MODULES(fuse, [fuse >= 2.2])
