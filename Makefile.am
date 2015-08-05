@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in
-## Added by XZ.
-## Need configure.ac to generate .configure file
-AM_CPPFLAGS =  -D_REENTRANT -D_FILE_OFFSET_BITS=64 -D_POSIX_SOURCE -D_POSIX_C_SOURCE=199309L -D_SVID_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_GNU_SOURCE
+
+AM_CPPFLAGS =  -D_REENTRANT -D_FILE_OFFSET_BITS=64 -D_POSIX_SOURCE -D_POSIX_C_SOURCE=199309L -D_SVID_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_GNU_SOURCE -DDEBUG
 if CONFIG_OSX
 AM_CPPFLAGS += -D_DARWIN_C_SOURCE -D__FreeBSD__=10
 endif
@@ -21,6 +20,9 @@ endif
 PCFS_SOURCES = $(common_sources) background_compress.c fusecompress.c compress.c direct_compress.c
 PCFS_offline_SOURCES = $(common_sources) tools/offline.c
 fsck_PCFS_SOURCES = $(common_sources) tools/fsck.c
+
+#fusecompress_LDADD = $(FUSECOMPRESS_LIBS)
+#fusecompress_CFLAGS = $(FUSECOMPRESS_CFLAGS)
 
 EXTRA_DIST = BUGS
 
