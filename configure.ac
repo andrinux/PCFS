@@ -1,4 +1,4 @@
-AC_INIT(fusecompress, 0.9.2)
+AC_INIT(PCFS by RPI, 1.0)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
