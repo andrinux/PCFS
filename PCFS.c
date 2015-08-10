@@ -1,11 +1,9 @@
 /*
-    FuseCompress
-    Copyright (C) 2005 Milan Svoboda <milan.svoboda@centrum.cz>
-    Copyright (C) 2008, 2011 Ulrich Hecht <uli@suse.de>
-
-    This program can be distributed under the terms of the GNU GPL v2.
-    See the file COPYING.
+* Core file of PCFS: Pagelevel Compression File System
+* This is the core file containing the implementations of callback functions.
+* Each Functions must be fully implemented in cases of various calling in Apps.
 */
+
 
 #define FUSE_USE_VERSION 26
 
@@ -50,26 +48,38 @@
 #include "file.h"
 #include "direct_compress.h"
 #include "background_compress.h"
-//#include "compress_lzo.h"
-//#include "dedup.h"
 
 static char DOT = '.';
 static int cmpdirFd;	// Open fd to cmpdir for fchdir.
 
-static inline const char* fusecompress_getpath(const char *path)
+//Get the file size given a const char path.
+//off_t is defined as long int.
+off_t PCFS_getFileSize(const char* path)
+{
+	struct stat *stbuf = (struct stat*) malloc (sizeof(struct stat));
+	int res = lstat(path, stbuf);
+	int size = stbuf->st_size;
+	free(stbuf); // in case of memory leak.
+	if (res == -1)
+		return -1;
+	else
+		return size;
+}
+
+static inline const char* PCFS_getpath(const char *path)
 {
 	if (path[1] == 0)
 		return &DOT;
 	return ++path;
 }
 
-static int fusecompress_getattr(const char *path, struct stat *stbuf)
+static int PCFS_getattr(const char *path, struct stat *stbuf)
 {
 	int           res;
 	const char   *full;
 	file_t       *file;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s')", full);
 
@@ -139,12 +149,12 @@ static int fusecompress_getattr(const char *path, struct stat *stbuf)
 	return 0;
 }
 
-static int fusecompress_readlink(const char *path, char *buf, size_t size)
+static int PCFS_readlink(const char *path, char *buf, size_t size)
 {
 	int         res;
 	const char *full;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	res = readlink(full, buf, size - 1);
 	if (res == -1)
@@ -155,14 +165,14 @@ static int fusecompress_readlink(const char *path, char *buf, size_t size)
 	return 0;
 }
 
-static int fusecompress_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
+static int PCFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		       off_t offset, struct fuse_file_info *fi)
 {
 	const char    *full;
 	DIR           *dp;
 	struct dirent *de;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	dp = opendir(full);
 	if (dp == NULL)
@@ -177,7 +187,7 @@ static int fusecompress_readdir(const char *path, void *buf, fuse_fill_dir_t fil
 			continue;
 		
 		/* ignore internal use files */
-		if (!strncmp(de->d_name, FUSECOMPRESS_PREFIX, sizeof(FUSECOMPRESS_PREFIX) - 1))
+		if (!strncmp(de->d_name, PCFS_PREFIX, sizeof(PCFS_PREFIX) - 1))
 			continue;
 
 		memset(&st, 0, sizeof(st));
@@ -191,7 +201,7 @@ static int fusecompress_readdir(const char *path, void *buf, fuse_fill_dir_t fil
 	return 0;
 }
 
-static int fusecompress_mknod(const char *path, mode_t mode, dev_t rdev)
+static int PCFS_mknod(const char *path, mode_t mode, dev_t rdev)
 {
 	int ret = 0;
 	const char *full;
@@ -200,7 +210,7 @@ static int fusecompress_mknod(const char *path, mode_t mode, dev_t rdev)
 	struct fuse_context *fc;
 	file_t     *file;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s') mode 0%o rdev 0x%x", full, mode, (unsigned int)rdev);
 
@@ -229,7 +239,7 @@ static int fusecompress_mknod(const char *path, mode_t mode, dev_t rdev)
 	return ret;
 }
 
-static int fusecompress_mkdir(const char *path, mode_t mode)
+static int PCFS_mkdir(const char *path, mode_t mode)
 {
 	int ret = 0;
 	const char *full;
@@ -237,7 +247,7 @@ static int fusecompress_mkdir(const char *path, mode_t mode)
 	gid_t gid;
 	struct fuse_context *fc;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s')", full);
 
@@ -262,11 +272,11 @@ static int fusecompress_mkdir(const char *path, mode_t mode)
 	return ret;
 }
 
-static int fusecompress_rmdir(const char *path)
+static int PCFS_rmdir(const char *path)
 {
 	const char *full;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	if (rmdir(full) == -1)
 		return -errno;
@@ -274,13 +284,13 @@ static int fusecompress_rmdir(const char *path)
 	return 0;
 }
 
-static int fusecompress_unlink(const char *path)
+static int PCFS_unlink(const char *path)
 {
 	int	    ret = 0;
 	const char *full;
 	file_t     *file;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s')", full);
 
@@ -306,11 +316,11 @@ static int fusecompress_unlink(const char *path)
 	return ret;
 }
 
-static int fusecompress_symlink(const char *from, const char *to)
+static int PCFS_symlink(const char *from, const char *to)
 {
 	const char *full_to;
 	
-	full_to = fusecompress_getpath(to);
+	full_to = PCFS_getpath(to);
 	DEBUG_("('%s' -> '%s')", from, full_to);
 
 	if (symlink(from, full_to) == -1)
@@ -322,7 +332,7 @@ static int fusecompress_symlink(const char *from, const char *to)
 	return 0;
 }
 
-static int fusecompress_rename(const char *from, const char *to)
+static int PCFS_rename(const char *from, const char *to)
 {
 	int         ret = 0;
 	const char *full_from;
@@ -330,8 +340,8 @@ static int fusecompress_rename(const char *from, const char *to)
 	file_t     *file_from;
 	file_t     *file_to;
 
-	full_from = fusecompress_getpath(from);
-	full_to = fusecompress_getpath(to);
+	full_from = PCFS_getpath(from);
+	full_to = PCFS_getpath(to);
 
 	DEBUG_("('%s' -> '%s')", full_from, full_to);
 
@@ -371,15 +381,15 @@ static int fusecompress_rename(const char *from, const char *to)
 	return ret;
 }
 
-static int fusecompress_link(const char *from, const char *to)
+static int PCFS_link(const char *from, const char *to)
 {
 	const char *full_from;
 	const char *full_to;
 	file_t* file;
 	int res;
 	
-	full_from = fusecompress_getpath(from);
-	full_to = fusecompress_getpath(to);
+	full_from = PCFS_getpath(from);
+	full_to = PCFS_getpath(to);
 	
 	file = direct_open(full_from,TRUE);
 	if(file->compressor && !do_decompress(file)) {
@@ -396,11 +406,11 @@ static int fusecompress_link(const char *from, const char *to)
 	return 0;
 }
 
-static int fusecompress_chmod(const char *path, mode_t mode)
+static int PCFS_chmod(const char *path, mode_t mode)
 {
 	const char *full;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	int res;
 
@@ -412,11 +422,11 @@ static int fusecompress_chmod(const char *path, mode_t mode)
 	return 0;
 }
 
-static int fusecompress_chown(const char *path, uid_t uid, gid_t gid)
+static int PCFS_chown(const char *path, uid_t uid, gid_t gid)
 {
 	const char *full;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	int res;
 
@@ -428,14 +438,14 @@ static int fusecompress_chown(const char *path, uid_t uid, gid_t gid)
 	return 0;
 }
 
-static int fusecompress_truncate(const char *path, off_t size)
+static int PCFS_truncate(const char *path, off_t size)
 {
 	int         ret = 0;
 	const char *full;
 	file_t     *file;
 	int fd;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s'), new size: %zd", full, size);
 	STAT_(STAT_TRUNCATE);
@@ -490,7 +500,7 @@ out:
 	return ret;	
 }
 
-static int fusecompress_utime(const char *path, struct utimbuf *buf)
+static int PCFS_utime(const char *path, struct utimbuf *buf)
 {
 	const char *full;
 	file_t *file;
@@ -507,7 +517,7 @@ static int fusecompress_utime(const char *path, struct utimbuf *buf)
 		timesbuf=timesval;
 	}
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 	DEBUG_("('%s')", full);
 
 	struct stat st;
@@ -532,7 +542,7 @@ static int fusecompress_utime(const char *path, struct utimbuf *buf)
 	return 0;
 }
 
-static int fusecompress_open(const char *path, struct fuse_file_info *fi)
+static int PCFS_open(const char *path, struct fuse_file_info *fi)
 {
 	int            res;
 	const char    *full;
@@ -540,7 +550,7 @@ static int fusecompress_open(const char *path, struct fuse_file_info *fi)
 	file_t        *file;
 	descriptor_t  *descriptor;
 	
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	DEBUG_("('%s')", full);
 	STAT_(STAT_OPEN);
@@ -567,7 +577,7 @@ static int fusecompress_open(const char *path, struct fuse_file_info *fi)
 	{
 		// TODO: Some inteligent append handling...
 		//
-		// Note: fusecompress_write is called with offset to the end of
+		// Note: PCFS_write is called with offset to the end of
 		//       file - this is fuse/kernel part of work...
 		//
 		fi->flags &= ~O_APPEND;
@@ -650,7 +660,7 @@ static int fusecompress_open(const char *path, struct fuse_file_info *fi)
 	return 0;
 }
 
-static int fusecompress_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
+static int PCFS_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
 	int           res;
 	file_t       *file;
@@ -695,7 +705,7 @@ static int fusecompress_read(const char *path, char *buf, size_t size, off_t off
 	return res;
 }
 
-static int fusecompress_write(const char *path, const char *buf, size_t size,
+static int PCFS_write(const char *path, const char *buf, size_t size,
                           off_t offset, struct fuse_file_info *fi)
 {
 	int           res;
@@ -736,6 +746,7 @@ static int fusecompress_write(const char *path, const char *buf, size_t size,
 
 	if (file->compressor)
 	{
+		//XZ: do the compression and write to file inside this function.
 		res = direct_compress(file, descriptor, buf, size, offset);
 	}
 	else
@@ -761,14 +772,14 @@ static int fusecompress_write(const char *path, const char *buf, size_t size,
 //	sched_yield();
 	return res;
 }
-
-static int fusecompress_release(const char *path, struct fuse_file_info *fi)
+//Release the 
+static int PCFS_release(const char *path, struct fuse_file_info *fi)
 {
 	const char   *full;
 	file_t       *file;
 	descriptor_t *descriptor;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	descriptor = (descriptor_t *) fi->fh;
 	assert(descriptor);
@@ -802,7 +813,7 @@ static int fusecompress_release(const char *path, struct fuse_file_info *fi)
 	return 0;
 }
 
-static int fusecompress_fsync(const char *path, int isdatasync,
+static int PCFS_fsync(const char *path, int isdatasync,
                           struct fuse_file_info *fi)
 {
 	int res;
@@ -823,12 +834,12 @@ static int fusecompress_fsync(const char *path, int isdatasync,
 	return 0;
 }
 
-static int fusecompress_statfs(const char *path, struct statvfs *stbuf)
+static int PCFS_statfs(const char *path, struct statvfs *stbuf)
 {
 	int         res;
 	const char *full;
 
-	full = fusecompress_getpath(path);
+	full = PCFS_getpath(path);
 
 	res = statvfs(full, stbuf);
 	if(res == -1)
@@ -839,7 +850,7 @@ static int fusecompress_statfs(const char *path, struct statvfs *stbuf)
 
 #define REISERFS_SUPER_MAGIC 0x52654973
 
-static void *fusecompress_init(struct fuse_conn_info* conn)
+static void *PCFS_init(struct fuse_conn_info* conn)
 {
 	struct statfs fs;
 
@@ -893,7 +904,7 @@ static void *fusecompress_init(struct fuse_conn_info* conn)
 	return NULL;
 }
 
-static void fusecompress_destroy(void *arg)
+static void PCFS_destroy(void *arg)
 {
 	int r;
 	struct timespec delay = {
@@ -949,29 +960,29 @@ static void fusecompress_destroy(void *arg)
 
 }
 
-static struct fuse_operations fusecompress_oper = {
-    .getattr	= fusecompress_getattr,
-    .readlink	= fusecompress_readlink,
-    .readdir	= fusecompress_readdir,
-    .mknod	= fusecompress_mknod,
-    .mkdir	= fusecompress_mkdir,
-    .symlink	= fusecompress_symlink,
-    .unlink	= fusecompress_unlink,
-    .rmdir	= fusecompress_rmdir,
-    .rename	= fusecompress_rename,
-    .link	= fusecompress_link,
-    .chmod	= fusecompress_chmod,
-    .chown	= fusecompress_chown,
-    .truncate	= fusecompress_truncate,
-    .utime	= fusecompress_utime,
-    .open	= fusecompress_open,
-    .read	= fusecompress_read,
-    .write	= fusecompress_write,
-    .statfs	= fusecompress_statfs,
-    .release	= fusecompress_release,
-    .fsync	= fusecompress_fsync,
-    .init       = fusecompress_init,
-    .destroy    = fusecompress_destroy,
+static struct fuse_operations PCFS_oper = {
+    .getattr	= PCFS_getattr,
+    .readlink	= PCFS_readlink,
+    .readdir	= PCFS_readdir,
+    .mknod	= PCFS_mknod,
+    .mkdir	= PCFS_mkdir,
+    .symlink	= PCFS_symlink,
+    .unlink	= PCFS_unlink,
+    .rmdir	= PCFS_rmdir,
+    .rename	= PCFS_rename,
+    .link	= PCFS_link,
+    .chmod	= PCFS_chmod,
+    .chown	= PCFS_chown,
+    .truncate	= PCFS_truncate,
+    .utime	= PCFS_utime,
+    .open	= PCFS_open,
+    .read	= PCFS_read,
+    .write	= PCFS_write,
+    .statfs	= PCFS_statfs,
+    .release	= PCFS_release,
+    .fsync	= PCFS_fsync,
+    .init       = PCFS_init,
+    .destroy    = PCFS_destroy,
 };
 
 static void print_help(void)
@@ -984,7 +995,7 @@ static void print_help(void)
 #ifndef CONFIG_OSX
 	       "]"
 #endif
-	       "\n\n", "fusecompress");
+	       "\n\n", "PCFS");
 
 	printf("\t-h                   print this help\n");
 	printf("\t-v                   print version\n");
@@ -1008,7 +1019,7 @@ static void print_help(void)
 
 static void print_version(void)
 {
-	printf("%s version %d.%d.%d\n", "fusecompress", 0, 9, 1);
+	printf("%s version %d.%d.%d\n", "PCFS", 0, 9, 1);
 }
 
 #include <signal.h>
@@ -1022,7 +1033,7 @@ static void sigterm_handler(int sig)
 	UNLOCK(&database.lock);
 }
 
-/* Sets a SIGTERM handler to keep fusecompress from exiting on a SIGTERM.
+/* Sets a SIGTERM handler to keep PCFS from exiting on a SIGTERM.
    A typical problem with FUSE filesystems mounted on / is that init scripts
    send a SIGTERM (and, if the process survives, a SIGKILL) to all processes
    before unmounting the filesystems. Normally, FUSE filesystems terminate
@@ -1045,12 +1056,12 @@ static int set_sigterm_handler(void)
 	sa.sa_flags = 0;
 
 	if (sigaction(SIGTERM, NULL, &old_sa) == -1) {
-		perror("fusecompress: cannot get old signal handler");
+		perror("PCFS: cannot get old signal handler");
 		return -1;
 	}
 
 	if (sigaction(SIGTERM, &sa, NULL) == -1) {
-		perror("fusecompress: cannot set signal handler");
+		perror("PCFS: cannot set signal handler");
 		return -1;
 	}
 	return 0;
@@ -1359,7 +1370,7 @@ trysomethingelse:
 	}
 #endif /* __linux__ */
 	
-	openlog("fusecompress", LOG_PERROR | LOG_CONS, LOG_USER);
+	openlog("PCFS", LOG_PERROR | LOG_CONS, LOG_USER);
 #ifndef DEBUG
 	setlogmask(LOG_UPTO(LOG_INFO));
 #endif
@@ -1394,7 +1405,7 @@ trysomethingelse:
 	}
 	
 	
-	ret = fuse_main(fusec, fusev, &fusecompress_oper, NULL);
+	ret = fuse_main(fusec, fusev, &PCFS_oper, NULL);
 	
 	
 	if (fs_opts) free(fs_opts);
