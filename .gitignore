@@ -15,4 +15,13 @@ AUTHORS
 NEWS
 COPYING
 ChangeLog
+INSTALL
+Makefile.in
+
+*~
+
+install.sh
+
+depcomp
+./deps
 
