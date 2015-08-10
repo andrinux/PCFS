@@ -1,5 +1,5 @@
 /*
-    FuseCompress
+    PCFS
     Copyright (C) 2006 Milan Svoboda <milan.svoboda@centrum.cz>
 */
 

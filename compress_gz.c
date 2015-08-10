@@ -18,6 +18,11 @@
 
 #define BUF_SIZE 4096
 
+static int gzwrite4K (void *file, void *buf, unsigned int len)
+{
+	return 0;
+}
+
 /**
  * Close compressed stream.
  *
@@ -157,6 +162,7 @@ compressor_t module_gzip = {
 	.decompress = gzDecompress,
 	.open = (void *(*) (int fd, const char *mode)) gzdopen,
 	.write = (int (*)(void *file, void *buf, unsigned int len)) gzwrite,
+	.write4K = (int (*)(void *file, void *buf, unsigned int len)) gzwrite4K,
 	.read = (int (*)(void *file, void *buf, unsigned int len)) gzread,
 	.close = (int (*)(void *file)) gzClose,
 };
