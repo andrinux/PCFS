@@ -1,13 +1,15 @@
 *.o
+PCFS
 aclocal.m4
-./autom4te.cache
+autom4te.cache/
 compile
 config.status
 
-PCFS 
+PCFS
 fsck.PCFS
 PCFS_offline
 
+config.h.in
 configure
 missing
 
@@ -17,11 +19,12 @@ COPYING
 ChangeLog
 INSTALL
 Makefile.in
+README
 
 *~
 
-install.sh
+install-sh
 
 depcomp
-./deps
-
+.deps/
+stamp-h1
