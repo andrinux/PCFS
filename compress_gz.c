@@ -23,6 +23,11 @@ static int gzwrite4K (void *file, void *buf, unsigned int len)
 	return 0;
 }
 
+static int gzread4K(void *file, void *buf, unsigned int len)
+{
+	return 0;
+}
+
 /**
  * Close compressed stream.
  *
@@ -164,6 +169,7 @@ compressor_t module_gzip = {
 	.write = (int (*)(void *file, void *buf, unsigned int len)) gzwrite,
 	.write4K = (int (*)(void *file, void *buf, unsigned int len)) gzwrite4K,
 	.read = (int (*)(void *file, void *buf, unsigned int len)) gzread,
+	.read4K = (int (*)(void *file, void *buf, unsigned int len)) gzread4K,
 	.close = (int (*)(void *file)) gzClose,
 };
 
