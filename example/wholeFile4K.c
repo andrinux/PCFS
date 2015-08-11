@@ -17,14 +17,16 @@ int ZEXPORT gzwrite( gzFile file,  voidpc buf, unsigned len);
 
 #define PAGE_SIZE (4096)
 #define FAIL (-1)
-#define DEBUG 1
+//#define DEBUG 1
+
 
 struct compBlk{
 	Bytef dst[PAGE_SIZE];
-	uLong dst_len;
+	uLongf dst_len;
 };
 
 unsigned char DATA_BUFFER[PAGE_SIZE];
+unsigned char BUFFER[PAGE_SIZE];
 unsigned char BUFFER[PAGE_SIZE];
 
 //This is the function to get the file size
@@ -45,7 +47,7 @@ uLong getFileSize(const char* path)
 //**********************//
 //Deal with sequential write first, and random W/R thereafter.
 //To do random Write, we need to designate the ppos.
-int write4K(int fd, void* buf, uLong size)
+int write4K(int fd, Bytef* buf, uLong size)
 {
 	int count =  size / PAGE_SIZE; //index: 0->count
 	int index = 0;
@@ -54,9 +56,12 @@ int write4K(int fd, void* buf, uLong size)
 	Bytef* tmpBuf;
 	cBlk = (struct compBlk*) malloc((1+count)*sizeof(struct compBlk));
 	for(index = 0; index <= count; index++){
+		//Initialize cBlk
+		memset(cBlk[index].dst, 0, PAGE_SIZE);
+		cBlk[index].dst_len =  PAGE_SIZE;
 		//From (buf + index*PAGE_SIZE)
 		struct compBlk* curBlk = cBlk+index;
-		uLong blkSize = (index <= count)? PAGE_SIZE : size%PAGE_SIZE;
+		uLong blkSize = (index <= count)? PAGE_SIZE : size % PAGE_SIZE;
 
 #ifdef DEBUG
 		printf("DEBUG: No. %2d blkSize is %ld. \n", index, blkSize);
@@ -69,7 +74,7 @@ int write4K(int fd, void* buf, uLong size)
 		tmpBuf=(Bytef*) malloc(sizeof(Bytef) * 4096);
 		int ret =compress(tmpBuf, &curBlk->dst_len, 
 							(Bytef*) (buf + index*PAGE_SIZE), (uLong) blkSize);
-		printf("Ret is %d.\n", ret);
+		printf("Ret is %d.dst_len is %ld.\n", ret, curBlk->dst_len);
 		if(Z_OK != ret ){
 			printf("%d block Error.\n",index);
 			return FAIL;
@@ -81,7 +86,6 @@ int write4K(int fd, void* buf, uLong size)
 	free(tmpBuf);
 	return 0;
 }
-
 
 
 
@@ -110,9 +114,9 @@ void testCompress(const char* path)
     //File openning finished
 	lseek(fin, 0, SEEK_SET);
 	int nchar = 0;
-	unsigned char *buf;
+	Bytef *buf;
 	uLong fsize = getFileSize(file);
-	buf = (unsigned char *) malloc(fsize * sizeof(unsigned char));
+	buf = (Bytef *) malloc(fsize * sizeof(Bytef));
 	nchar = read(fin, buf, fsize);
 	if(nchar != fsize){
 		printf("Error occured in Reading to buf...\n");
@@ -129,6 +133,7 @@ void testCompress(const char* path)
 		printf("%d written into disk, %ld request .\n", nchar, fsize);
 		return;
 	}
+
 	free(buf);
     close(fin);
 	close(fout);
