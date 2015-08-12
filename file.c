@@ -1,14 +1,6 @@
 /*
 *  C Implementation: file
 *
-* Description: 
-*
-*
-* Author: Milan Svoboda <milan.svoboda@centrum.cz>, (C) 2005
-* (C) 2009, 2011 Ulrich Hecht <uli@suse.de>
-*
-* Copyright: See COPYING file that comes with this distribution
-*
 */
 
 #include <assert.h>
@@ -63,7 +55,7 @@ compressor_t *file_compressor(const header_t *fh)
 int file_write_header(int fd, compressor_t *compressor, off_t size)
 {
 	header_t fh;
-
+    int ret = -1;
 	assert(fd >= 0);
 	assert(compressor);
 	assert(size != (off_t) -1);
@@ -75,7 +67,9 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
 	fh.size = to_le64(size);
 
 	DEBUG_("writing header to %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
-	return write(fd, &fh, sizeof(fh));
+	ret = write(fd, &fh, sizeof(fh));
+    //ret = write(fd, &flags, sizeof(flags));
+    return ret;
 }
 
 /**
