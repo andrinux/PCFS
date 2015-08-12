@@ -1,10 +1,4 @@
-/*
-    fusecompress_offline
-    (C) 2008 Ulrich Hecht <uli@suse.de>
 
-    This program can be distributed under the terms of the GNU GPL v2.
-    See the file COPYING.
- */
 
 #include "../structs.h"
 #include "../compress.h"
@@ -80,7 +74,7 @@ int transform(const char *fpath, const struct stat *sb, int typeflag, struct FTW
 		return 0;
 
 	/* internal file (attribute file, dedup DB) */
-	if (strncmp(&fpath[ftwbuf->base], FUSECOMPRESS_PREFIX, sizeof(FUSECOMPRESS_PREFIX) - 1) == 0)
+	if (strncmp(&fpath[ftwbuf->base], PCFS_PREFIX, sizeof(PCFS_PREFIX) - 1) == 0)
 		return 0;
 
 	if (verbose)
