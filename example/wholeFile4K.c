@@ -21,7 +21,7 @@ int ZEXPORT gzwrite( gzFile file,  voidpc buf, unsigned len);
 #define PAGE_SIZE (4096)
 #define FAIL (-1)
 //#define DEBUG 1
-
+#define SEG 10
 
 struct compBlk{
 	Bytef dst[PAGE_SIZE];
@@ -60,7 +60,6 @@ int write4K(int fd, Bytef* buf, uLong size)
 	struct compBlk* cBlk;
 	Bytef* tmpBuf;
 	cBlk = (struct compBlk*) malloc((1+count)*sizeof(struct compBlk));
-printf("Hello world. 63\n");
 	for(index = 0; index <= count; index++){
 		//Initialize cBlk
 		memset(cBlk[index].dst, 0, PAGE_SIZE);
@@ -172,6 +171,43 @@ void testCompress(const char* path)
 int read4K(int fd, Bytef* buf, uLong size)
 {
 	int count = size / PAGE_SIZE;
+	int index = 0;
+	Bytef decBuf[PAGE_SIZE * 2] = { 0 };
+	uLong decLen1 = PAGE_SIZE;
+	uLong decLen2 = PAGE_SIZE;
+	//Store the compression information: offset and flag.
+	uLong offset[SEG]={873, 657, 727, 749, 910, 821};
+	int FLAG[SEG] = {1, 1, 1, 1, 1, 1};
+	int ret1 = -99, ret2 = -99;
+	int nchar = 0;
+	int total = 0;
+	while(index < count){
+		memset(decBuf, 0, PAGE_SIZE * 2);
+		//Need to find a way to continue decompressing for two sectors.
+		uLong inLen = PAGE_SIZE;
+		if(FLAG[index] == 1){
+			ret1 = uncompress(decBuf, &decLen1, buf+PAGE_SIZE*index, inLen);
+			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
+									buf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
+			printf("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
+		}else{
+			//no compression
+			ret1 = Z_OK; ret2 = Z_OK;
+			decLen1 = PAGE_SIZE; decLen2 = 0;
+			memcpy(decBuf, buf+PAGE_SIZE*index, PAGE_SIZE);
+		}
+
+		if(ret1 == Z_OK && ret2 == Z_OK){
+			nchar = write(fd, decBuf, decLen1 + decLen2);
+			total += nchar;
+			index++;
+			printf("Ret is %d, Write %d Bytes into file.\n", ret1, nchar);
+		}else{
+			printf("Ret is %d, Something happened.\n", ret1 + ret2);
+			return FAIL;
+		}
+	}
+	return total;
 }
 
 //Question is when to stop. More than one page is squeezed into one physical page.
@@ -180,7 +216,7 @@ void testDecompress(const char* path)
 	const char * in = path;
 	const char * out ="/home/xuebinzhang/newTrace.log";
 
-	int fin=open(in, O_RDONLY);
+	int fin = open(in, O_RDONLY);
 	if(fin)
 		puts("Open compressed data source file: OK.");
 	else
@@ -197,7 +233,7 @@ void testDecompress(const char* path)
 	lseek(fin, 0, SEEK_SET);
 	int nchar = 0;
 	Bytef *buf;
-	uLong fsize = getFileSize(file);
+	uLong fsize = getFileSize(in);
 	buf = (Bytef *) malloc(fsize * sizeof(Bytef));
 	nchar = read(fin, buf, fsize);
 	if(nchar != fsize){
@@ -205,14 +241,14 @@ void testDecompress(const char* path)
 		return;
 	}
 	//Call read4K, deompress one by one. How to store the flag information?
-	nachar = read4K(fout, buf, fsize);
+	nchar = read4K(fout, buf, fsize);
 	
 	if(nchar == FAIL){
 		printf("Error occured in decompression.\n");
 		return;
 	}
 	else{
-		printf("%d read out from file, %ld put into memory .\n", fsize, nchar);
+		printf("%ld read out from file, %d put into memory .\n", fsize, nchar);
 		return;
 	}
 

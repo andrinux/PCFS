@@ -1,0 +1,487 @@
+    2.019142641	D	WS	 2845080	   8	2716	     pool-1-thread-1	M
+    2.104221641	D	WS	 2845088	   8	2716	     pool-1-thread-1	M
+    2.110755850	D	WS	 2845096	   8	2716	     pool-1-thread-1	M
+    2.116883600	D	WS	 1058464	  80	  77	     jbd2/mmcblk0p2-	J
+    2.133535809	D	WS	 1058544	   8	  77	     jbd2/mmcblk0p2-	J
+    5.613389918	D	WS	 2845104	  64	13258	     BrowserBlocking	M
+    5.630543335	D	WS	 1058552	  72	  77	     jbd2/mmcblk0p2-	J
+    5.638703293	D	WS	 1058624	  64	  77	     jbd2/mmcblk0p2-	J
+    5.645105002	D	WS	 1058688	   8	  77	     jbd2/mmcblk0p2-	J
+    8.550363358	D	WS	 2937736	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts-journal
+    8.574483692	D	WS	 2845168	  16	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts-journal
+    8.581956234	D	WS	 1058696	 120	  77	     jbd2/mmcblk0p2-	J
+    8.594711859	D	WS	 1058816	   8	  77	     jbd2/mmcblk0p2-	J
+    8.615138526	D	WS	 1058824	   8	  77	     jbd2/mmcblk0p2-	J
+    8.643458192	D	WS	 2937736	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts-journal
+    8.733044942	D	WS	 2845184	   8	13259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts
+    8.734753276	D	WS	 2845192	   8	13259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts
+    8.735949234	D	WS	 2937744	  16	13259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts
+    8.742888692	D	WS	 1058832	  40	  77	     jbd2/mmcblk0p2-	J
+    8.745887109	D	WS	 1058872	   8	  77	     jbd2/mmcblk0p2-	J
+    8.789340734	D	WS	 2937736	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Shortcuts-journal
+   12.029059967	D	WS	 2845208	   8	13238	        AsyncTask #4	M
+   12.038813092	D	WS	 1058880	 104	  77	     jbd2/mmcblk0p2-	J
+   12.054496592	D	WS	 1058984	   8	  77	     jbd2/mmcblk0p2-	J
+   13.829073315	D	WS	 2845216	   8	13296	     pool-1-thread-1	M
+   13.835633231	D	WS	 1058992	 104	  77	     jbd2/mmcblk0p2-	J
+   13.847440189	D	WS	 1059096	   8	  77	     jbd2/mmcblk0p2-	J
+   14.485487236	D	WS	 2845224	   8	13296	     pool-1-thread-1	M
+   14.496715528	D	WS	 1059104	 120	  77	     jbd2/mmcblk0p2-	J
+   14.510094320	D	WS	 1059224	   8	  77	     jbd2/mmcblk0p2-	J
+   14.681573654	D	WS	 2845232	   8	13296	     pool-1-thread-1	M
+   14.688327487	D	WS	 1059232	  72	  77	     jbd2/mmcblk0p2-	J
+   14.700941363	D	WS	 1059304	   8	  77	     jbd2/mmcblk0p2-	J
+   15.371278785	D	WS	 2845256	   8	13296	     pool-1-thread-1	M
+   15.376908743	D	WS	 1059312	 104	  77	     jbd2/mmcblk0p2-	J
+   15.488888911	D	WS	 1059416	   8	  77	     jbd2/mmcblk0p2-	J
+   15.504072078	D	WS	 2845264	   8	13296	     pool-1-thread-1	M
+   15.509524161	D	WS	 1059424	  80	  77	     jbd2/mmcblk0p2-	J
+   15.521718828	D	WS	 1059504	   8	  77	     jbd2/mmcblk0p2-	J
+   15.532625619	D	WS	 2845272	   8	13296	     pool-1-thread-1	M
+   15.537804328	D	WS	 1059512	  72	  77	     jbd2/mmcblk0p2-	J
+   15.546687453	D	WS	 1059584	   8	  77	     jbd2/mmcblk0p2-	J
+   15.672151870	D	WS	 2845280	  16	13275	     BrowserBlocking	M
+   15.673568870	D	WS	 2845296	  24	13275	     BrowserBlocking	M
+   15.675093204	D	WS	 2845320	  24	13275	     BrowserBlocking	M
+   15.687669079	D	WS	 1059592	  88	  77	     jbd2/mmcblk0p2-	J
+   15.701967745	D	WS	 1059680	   8	  77	     jbd2/mmcblk0p2-	J
+   15.786458163	D	WS	 2937776	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Network Action Predictor-journal
+   15.790622538	D	WS	 2845344	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Network Action Predictor-journal
+   15.805150913	D	WS	 1059688	  72	  77	     jbd2/mmcblk0p2-	J
+   15.817353455	D	WS	 1059760	   8	  77	     jbd2/mmcblk0p2-	J
+   15.819790746	D	WS	 1059768	   8	  77	     jbd2/mmcblk0p2-	J
+   15.853559163	D	WS	 2937776	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Network Action Predictor-journal
+   15.895743914	D	WS	 2937784	  16	13259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Network Action Predictor
+   15.931124664	D	WS	 2937776	   8	113259	     Chrome_DBThread	D	/data/com.android.chrome/app_chrome/Default/Network Action Predictor-journal
+   16.235337624	D	WS	 2845352	   8	13258	     BrowserBlocking	M
+   16.243249624	D	WS	 1059776	  80	  77	     jbd2/mmcblk0p2-	J
+   16.256302958	D	WS	 1059856	   8	  77	     jbd2/mmcblk0p2-	J
+   16.398695500	D	WS	 2845360	   8	13279	     pool-2-thread-1	D	/data/com.android.chrome/shared_prefs/com.android.chrome_preferences.xml
+   16.406439918	D	WS	 1059864	  96	  77	     jbd2/mmcblk0p2-	J
+   16.419667585	D	WS	 1059960	   8	  77	     jbd2/mmcblk0p2-	J
+   19.159618939	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   19.166950272	D	WS	 1059968	 144	  77	     jbd2/mmcblk0p2-	J
+   19.179214689	D	WS	 1060112	   8	  77	     jbd2/mmcblk0p2-	J
+   19.197284147	D	WS	 1060120	   8	  77	     jbd2/mmcblk0p2-	J
+   19.199127814	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   19.204589231	D	WS	 2845384	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs
+   19.207454814	D	WS	 1060128	  32	  77	     jbd2/mmcblk0p2-	J
+   19.215122314	D	WS	 1060160	   8	  77	     jbd2/mmcblk0p2-	J
+   19.217501731	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   19.241249397	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   19.244380606	D	WS	 1060168	  16	  77	     jbd2/mmcblk0p2-	J
+   19.246806064	D	WS	 1060184	   8	  77	     jbd2/mmcblk0p2-	J
+   19.282791522	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   19.285391564	D	WS	 2845384	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs
+   19.286417773	D	WS	 2845392	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs
+   19.297389190	D	WS	 1060192	  32	  77	     jbd2/mmcblk0p2-	J
+   19.305279315	D	WS	 1060224	   8	  77	     jbd2/mmcblk0p2-	J
+   19.307599398	D	WS	 2845376	   8	113275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   20.844851659	D	WS	 1060232	 120	  77	     jbd2/mmcblk0p2-	J
+   20.861617076	D	WS	 1060352	   8	  77	     jbd2/mmcblk0p2-	J
+   20.886950911	D	WS	 2845504	   8	13258	     BrowserBlocking	M
+   20.889929161	D	WS	 1060360	  32	  77	     jbd2/mmcblk0p2-	J
+   20.892492244	D	WS	 1060392	   8	  77	     jbd2/mmcblk0p2-	J
+   20.913123661	D	WS	 2845512	   8	413258	     BrowserBlocking	M
+   20.929892661	D	WS	 1060400	  56	  77	     jbd2/mmcblk0p2-	J
+   20.944027453	D	WS	 1060456	   8	  77	     jbd2/mmcblk0p2-	J
+   24.840034607	D	WS	 2845576	   8	13277	        AsyncTask #5	M
+   24.939672608	D	WS	 1060464	 144	  77	     jbd2/mmcblk0p2-	J
+   24.953278358	D	WS	 1060608	   8	  77	     jbd2/mmcblk0p2-	J
+   26.808806497	D	WS	 2845584	  24	2716	     pool-1-thread-1	M
+   26.834990789	D	WS	 1060616	 112	  77	     jbd2/mmcblk0p2-	J
+   26.850231580	D	WS	 1060728	   8	  77	     jbd2/mmcblk0p2-	J
+   28.963637846	D	WS	 2845608	   8	413275	     BrowserBlocking	M
+   29.047057806	D	WS	 1060736	 184	  77	     jbd2/mmcblk0p2-	J
+   29.838477645	D	WS	 1060920	   8	  77	     jbd2/mmcblk0p2-	J
+   29.848653145	D	WS	 1060928	  56	  77	     jbd2/mmcblk0p2-	J
+   29.868120145	D	WS	 1060984	   8	  77	     jbd2/mmcblk0p2-	J
+   29.876339770	D	WS	 2845616	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Session Storage/MANIFEST-000002
+   29.879870978	D	WS	 1060992	  32	  77	     jbd2/mmcblk0p2-	J
+   29.887784312	D	WS	 1061024	   8	  77	     jbd2/mmcblk0p2-	J
+   29.941990979	D	WS	 1061032	  56	  77	     jbd2/mmcblk0p2-	J
+   29.950583813	D	WS	 1061088	   8	  77	     jbd2/mmcblk0p2-	J
+   30.158303273	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.163805189	D	WS	 1061096	  96	  77	     jbd2/mmcblk0p2-	J
+   30.174062773	D	WS	 1061192	   8	  77	     jbd2/mmcblk0p2-	J
+   30.178654398	D	WS	 1061200	   8	  77	     jbd2/mmcblk0p2-	J
+   30.181838440	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.184481273	D	WS	 2845640	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   30.187329148	D	WS	 1061208	  32	  77	     jbd2/mmcblk0p2-	J
+   30.189722856	D	WS	 1061240	   8	  77	     jbd2/mmcblk0p2-	J
+   30.198381814	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.229946648	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.234109398	D	WS	 1061248	  16	  77	     jbd2/mmcblk0p2-	J
+   30.236488148	D	WS	 1061264	   8	  77	     jbd2/mmcblk0p2-	J
+   30.238475940	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.241391981	D	WS	 2845640	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   30.276674440	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   30.496290233	D	WS	 2845552	   8	113274	     Chrome_HistoryT	M
+   30.497505108	D	WS	 2845648	   8	113274	     Chrome_HistoryT	M
+   30.504265442	D	WS	 1061272	  48	  77	     jbd2/mmcblk0p2-	J
+   30.519834442	D	WS	 1061320	   8	  77	     jbd2/mmcblk0p2-	J
+   30.539486608	D	WS	 1061328	  48	  77	     jbd2/mmcblk0p2-	J
+   30.547695483	D	WS	 1061376	   8	  77	     jbd2/mmcblk0p2-	J
+   30.556942567	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   30.560587817	D	WS	 2366720	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.562710151	D	WS	 2366752	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.563838276	D	WS	 2366776	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.565085568	D	WS	 2366792	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.566236568	D	WS	 2366800	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.567360234	D	WS	 2366880	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.568542068	D	WS	 2366888	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.569731526	D	WS	 2366904	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   30.597854943	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   30.783993361	D	WS	 2845744	  32	13258	     BrowserBlocking	M
+   30.786278736	D	WS	 2845776	   8	13258	     BrowserBlocking	M
+   30.793802403	D	WS	 2845784	   8	13258	     BrowserBlocking	M
+   30.795504486	D	WS	 2845792	   8	13258	     BrowserBlocking	M
+   30.796936361	D	WS	 2845800	   8	13258	     BrowserBlocking	M
+   30.816089361	D	WS	 1061384	  96	  77	     jbd2/mmcblk0p2-	J
+   31.032529862	D	WS	 1061480	   8	  77	     jbd2/mmcblk0p2-	J
+   31.285208364	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   31.286824989	D	WS	 2845816	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   31.291417489	D	WS	 2937488	   8	100077	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   31.293108614	D	WS	 1061488	  88	  77	     jbd2/mmcblk0p2-	J
+   31.792770160	D	WS	 1061576	   8	  77	     jbd2/mmcblk0p2-	J
+   31.809923202	D	WS	 1061584	  32	  77	     jbd2/mmcblk0p2-	J
+   31.933682994	D	WS	 1061616	   8	  77	     jbd2/mmcblk0p2-	J
+   31.936605119	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   31.942848494	D	WS	 2845640	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.943956369	D	WS	 1841728	  16	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.945965036	D	WS	 1841744	  40	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.948454036	D	WS	 1841784	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.949687494	D	WS	 1841792	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.951145619	D	WS	 1841800	  24	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.955674661	D	WS	 1841824	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.957470369	D	WS	 1841832	   8	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.958654786	D	WS	 1841840	  16	13275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage
+   31.961570619	D	WS	 1061624	  32	  77	     jbd2/mmcblk0p2-	J
+   31.963980911	D	WS	 1061656	   8	  77	     jbd2/mmcblk0p2-	J
+   31.965680036	D	WS	 2845632	   8	513275	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/https_www.google.com_0.localstorage-journal
+   37.290220785	D	WS	 1061664	 120	  77	     jbd2/mmcblk0p2-	J
+   37.480381620	D	WS	 1061784	   8	  77	     jbd2/mmcblk0p2-	J
+   41.181150399	D	WS	 2845864	   8	13336	     BrowserBlocking	M
+   41.183369565	D	WS	 2845872	   8	13336	     BrowserBlocking	M
+   41.223011940	D	WS	 2845880	  16	13336	     BrowserBlocking	M
+   41.245199857	D	WS	 2845896	   8	13336	     BrowserBlocking	M
+   41.272695899	D	WS	 2845904	   8	13336	     BrowserBlocking	M
+   41.307188441	D	WS	 2845912	   8	13336	     BrowserBlocking	M
+   41.309313608	D	WS	 2845920	   8	13336	     BrowserBlocking	M
+   41.421456400	D	WS	 1061792	 104	  77	     jbd2/mmcblk0p2-	J
+   41.434630108	D	WS	 1061896	   8	  77	     jbd2/mmcblk0p2-	J
+   41.470123234	D	WS	 2845840	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   41.472589150	D	WS	 2845928	   8	113274	     Chrome_HistoryT	M
+   41.489556067	D	WS	 1061904	  72	  77	     jbd2/mmcblk0p2-	J
+   41.530054734	D	WS	 1061976	   8	  77	     jbd2/mmcblk0p2-	J
+   41.557332692	D	WS	 1061984	   8	  77	     jbd2/mmcblk0p2-	J
+   41.573691152	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   41.722813819	D	WS	 2937496	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+   41.726854569	D	WS	 2937512	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+   41.732121569	D	WS	 2937520	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+   41.744017528	D	WS	 2937528	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+   41.761943903	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   44.580900215	D	WS	 2936912	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   44.589602425	D	WS	 2936920	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.204983637	D	WS	 1061992	 120	  77	     jbd2/mmcblk0p2-	J
+   45.221387929	D	WS	 1062112	   8	  77	     jbd2/mmcblk0p2-	J
+   45.246567346	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.256980054	D	WS	 2655384	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   45.258622221	D	WS	 2790952	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   45.268134513	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.635162058	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.636332433	D	WS	 2936912	  16	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.645238349	D	WS	 1062120	  32	  77	     jbd2/mmcblk0p2-	J
+   45.647703682	D	WS	 1062152	   8	  77	     jbd2/mmcblk0p2-	J
+   45.699186224	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.702838933	D	WS	 2655384	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   45.712039266	D	WS	 2931584	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   45.718020849	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   45.764338433	D	WS	 2845936	   8	13296	     pool-1-thread-1	M
+   45.784772475	D	WS	 1062160	  80	  77	     jbd2/mmcblk0p2-	J
+   45.797273934	D	WS	 1062240	   8	  77	     jbd2/mmcblk0p2-	J
+   49.403166794	D	WS	 2845376	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   49.404204377	D	WS	 2845952	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   50.224136759	D	WS	 1062248	 104	  77	     jbd2/mmcblk0p2-	J
+   51.809714771	D	WS	 1062352	   8	  77	     jbd2/mmcblk0p2-	J
+   51.818250355	D	WS	 1062360	  80	  77	     jbd2/mmcblk0p2-	J
+   51.856035730	D	WS	 2845960	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   51.857588563	D	WS	 2937448	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   54.660672501	D	WS	 1062440	   8	  77	     jbd2/mmcblk0p2-	J
+   54.717245793	D	WS	 2845984	   8	100077	     jbd2/mmcblk0p2-	M
+   54.718953043	D	WS	 1062448	  48	  77	     jbd2/mmcblk0p2-	J
+   54.727824418	D	WS	 1062496	   8	  77	     jbd2/mmcblk0p2-	J
+   54.764215127	D	WS	 2845376	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   54.828367086	D	WS	 2845384	   8	13258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs
+   54.829396211	D	WS	 2845392	   8	13258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs
+   54.830698252	D	WS	 2937448	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   54.837758086	D	WS	 2845376	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+   54.850732336	D	WS	 2937456	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies
+   54.882420878	D	WS	 2937480	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies
+   54.899940628	D	WS	 2937448	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   55.000160212	D	WS	 2844688	  24	113363	     pool-2-thread-1	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   55.090008005	D	WS	 1062504	  80	  77	     jbd2/mmcblk0p2-	J
+   55.099812671	D	WS	 2845560	   8	  77	     jbd2/mmcblk0p2-	M
+   55.101894505	D	WS	 1062584	   8	  77	     jbd2/mmcblk0p2-	J
+   55.110140505	D	WS	 2844688	   8	113363	     pool-2-thread-1	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   55.216158340	D	WS	 2655464	   8	513363	     pool-2-thread-1	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   55.217996839	D	WS	 2655528	   8	513363	     pool-2-thread-1	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   55.225851131	D	WS	 2844688	   8	113363	     pool-2-thread-1	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   57.632198899	D	WS	 2846032	   8	13236	        AsyncTask #2	M
+   57.641745191	D	WS	 1062592	 104	  77	     jbd2/mmcblk0p2-	J
+   58.593473156	D	WS	 1062696	   8	  77	     jbd2/mmcblk0p2-	J
+   59.731179206	D	WS	 2846048	   8	13275	     BrowserBlocking	M
+   59.744587540	D	WS	 2846056	  24	13275	     BrowserBlocking	M
+   59.783423748	D	WS	 2846080	  32	13275	     BrowserBlocking	M
+   59.929087126	D	WS	 2846040	   8	  77	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/cache/Cache/ff81ed7a4c6edf6f_0
+   59.931485584	D	WS	 1062704	 104	  77	     jbd2/mmcblk0p2-	J
+   60.045195334	D	WS	 1062808	   8	  77	     jbd2/mmcblk0p2-	J
+   60.320400254	D	WS	 2936904	  24	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   60.322597254	D	WS	 2936960	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   60.331798503	D	WS	 1845304	   8	  77	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/app_chrome/Default/Session Storage/000003.log
+   60.333464379	D	WS	 1062816	  80	  77	     jbd2/mmcblk0p2-	J
+   60.348420796	D	WS	 1062896	   8	  77	     jbd2/mmcblk0p2-	J
+   60.352567587	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   60.684063256	D	WS	 2655384	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   60.685667631	D	WS	 2655448	  16	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   60.691314631	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   61.520424013	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   61.554743471	D	WS	 2366752	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   61.556487721	D	WS	 2366776	  32	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   61.558505888	D	WS	 2366880	  32	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   61.639214638	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   66.724700259	D	WS	 1062904	 104	  77	     jbd2/mmcblk0p2-	J
+   66.738880302	D	WS	 1063008	   8	  77	     jbd2/mmcblk0p2-	J
+   67.634107391	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   67.649180225	D	WS	 2937512	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+   67.654796226	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+   71.152675210	D	WS	 2936904	  24	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.175406877	D	WS	 2845560	   8	  77	     jbd2/mmcblk0p2-	M
+   71.192334711	D	WS	 1063016	 152	  77	     jbd2/mmcblk0p2-	J
+   71.210485086	D	WS	 1063168	   8	  77	     jbd2/mmcblk0p2-	J
+   71.223905669	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.274417086	D	WS	 2655384	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   71.275964003	D	WS	 2790952	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   71.387005588	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.479335838	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.480349671	D	WS	 2936912	  16	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.483746754	D	WS	 1063176	  48	  77	     jbd2/mmcblk0p2-	J
+   71.486235588	D	WS	 1063224	   8	  77	     jbd2/mmcblk0p2-	J
+   71.488263046	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   71.498018171	D	WS	 2655384	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   71.499735088	D	WS	 2931584	   8	13351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+   71.502288713	D	WS	 2936904	   8	113351	     pool-1-thread-1	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+   72.329701886	D	WS	 2844688	  24	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   72.466651303	D	WS	 1063232	  48	  77	     jbd2/mmcblk0p2-	J
+   72.479548178	D	WS	 1063280	   8	  77	     jbd2/mmcblk0p2-	J
+   72.643783430	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   72.852806931	D	WS	 2655464	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   72.974777016	D	WS	 2655552	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   73.080992350	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   73.247240559	D	WS	 1063288	  88	  77	     jbd2/mmcblk0p2-	J
+   73.256493476	D	WS	 1063376	  56	  77	     jbd2/mmcblk0p2-	J
+   73.265042059	D	WS	 1063432	   8	  77	     jbd2/mmcblk0p2-	J
+   73.268414434	D	WS	 2846120	   8	413275	     BrowserBlocking	M
+   73.272205518	D	WS	 1063440	  48	  77	     jbd2/mmcblk0p2-	J
+   73.308965645	D	WS	 1063488	   8	  77	     jbd2/mmcblk0p2-	J
+   73.318883103	D	WS	 1063496	  40	  77	     jbd2/mmcblk0p2-	J
+   73.321708853	D	WS	 1063536	   8	  77	     jbd2/mmcblk0p2-	J
+   73.324004186	D	WS	 2846128	   8	13275	     BrowserBlocking	M
+   73.329185311	D	WS	 1063544	  32	  77	     jbd2/mmcblk0p2-	J
+   73.332696811	D	WS	 1063576	   8	  77	     jbd2/mmcblk0p2-	J
+   73.339191561	D	WS	 2846136	   8	413275	     BrowserBlocking	M
+   73.345597103	D	WS	 1063584	  48	  77	     jbd2/mmcblk0p2-	J
+   73.361515228	D	WS	 1063632	   8	  77	     jbd2/mmcblk0p2-	J
+   73.499149311	D	WS	 2844688	  16	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   73.518804436	D	WS	 2655640	   8	113389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db-journal
+   73.520371311	D	WS	 2655672	  16	113389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db-journal
+   73.521569811	D	WS	 2655728	   8	113389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db-journal
+   73.546709228	D	WS	 2844704	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   73.715860189	D	WS	 1063640	  64	  77	     jbd2/mmcblk0p2-	J
+   73.725553022	D	WS	 1063704	   8	  77	     jbd2/mmcblk0p2-	J
+   73.730260064	D	WS	 1063712	  56	  77	     jbd2/mmcblk0p2-	J
+   73.849572523	D	WS	 1063768	   8	  77	     jbd2/mmcblk0p2-	J
+   73.872912814	D	WS	 2844712	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   73.927134314	D	WS	 2655640	   8	113389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db-journal
+   73.936933273	D	WS	 1063776	  56	  77	     jbd2/mmcblk0p2-	J
+   74.082206316	D	WS	 1063832	   8	  77	     jbd2/mmcblk0p2-	J
+   74.085907733	D	WS	 2655648	   8	513389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db
+   74.252498901	D	WS	 2655704	   8	513389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db
+   74.409429443	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   74.527376487	D	WS	 2838744	   8	513389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db
+   74.562686404	D	WS	 2655640	   8	113389	     ApiInvokingHand	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast_stat.db-journal
+   74.595691112	D	WS	 2655464	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   74.596705820	D	WS	 2655520	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   74.699190029	D	WS	 2655552	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   74.822759905	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   74.848425738	D	WS	 2844688	  24	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   74.861026155	D	WS	 2844712	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   75.124230616	D	WS	 1063840	  96	  77	     jbd2/mmcblk0p2-	J
+   75.138391116	D	WS	 1063936	   8	  77	     jbd2/mmcblk0p2-	J
+   75.164263283	D	WS	 2846192	  64	13275	     BrowserBlocking	M
+   75.176371783	D	WS	 1063944	  40	  77	     jbd2/mmcblk0p2-	J
+   75.183718658	D	WS	 1063984	   8	  77	     jbd2/mmcblk0p2-	J
+   75.202409324	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   75.233172533	D	WS	 2655464	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.234853366	D	WS	 2655520	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.236005241	D	WS	 2655552	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.298143785	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   75.322689118	D	WS	 2844688	  32	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   75.338498034	D	WS	 1063992	 104	  77	     jbd2/mmcblk0p2-	J
+   75.362201076	D	WS	 1064096	   8	  77	     jbd2/mmcblk0p2-	J
+   75.435647951	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   75.551902411	D	WS	 2655464	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.618642286	D	WS	 2655520	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.619781327	D	WS	 2655552	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   75.652592828	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   76.567732377	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   76.569720169	D	WS	 2844696	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   76.584964293	D	WS	 2844704	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   79.121932189	D	WS	 2846288	   8	  77	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/cache/Cache/a3fe273bff213040_0
+   79.285411105	D	WS	 1064104	 104	  77	     jbd2/mmcblk0p2-	J
+   79.749441192	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   79.899326361	D	WS	 1064208	   8	  77	     jbd2/mmcblk0p2-	J
+   80.272421280	D	WS	 2366736	  32	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   80.439423490	D	WS	 2366776	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   80.629457991	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   80.786184743	D	WS	 2366880	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+   80.974308660	D	WS	 2655464	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   81.093063536	D	WS	 1584296	   8	513378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db
+   81.258644912	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+   81.285262329	D	WS	 2844688	   8	113378	     pool-1-temporar	D	/data/com.tencent.android.qqdownloader/databases/mobile_ast.db-journal
+   84.186216685	D	WS	 1064216	 104	  77	     jbd2/mmcblk0p2-	J
+   84.276186560	D	WS	 1064320	   8	  77	     jbd2/mmcblk0p2-	J
+   85.525303987	D	WS	 2846320	   8	13275	     BrowserBlocking	M
+   85.526991528	D	WS	 2846328	  24	13275	     BrowserBlocking	M
+   85.809261655	D	WS	 2846352	  32	13275	     BrowserBlocking	M
+   85.854111322	D	WS	 1064328	  80	  77	     jbd2/mmcblk0p2-	J
+   85.864121905	D	WS	 1064408	   8	  77	     jbd2/mmcblk0p2-	J
+   87.687946253	D	WS	 2937448	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   87.689701044	D	WS	 2845960	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   87.718495628	D	WS	 2846400	  24	  77	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/cache/Cache/10196cc3c43bd963_0
+   87.720171920	D	WS	 1064416	  80	  77	     jbd2/mmcblk0p2-	J
+   87.732608879	D	WS	 1064496	   8	  77	     jbd2/mmcblk0p2-	J
+   87.791678920	D	WS	 2937448	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   88.517185885	D	WS	 2937448	   8	113258	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Cookies-journal
+   89.092072514	D	WS	 2846448	   8	13277	        AsyncTask #5	M
+   89.096806097	D	WS	 1064504	  40	  77	     jbd2/mmcblk0p2-	J
+   89.105884305	D	WS	 1064544	 120	  77	     jbd2/mmcblk0p2-	J
+   89.120825347	D	WS	 1064664	   8	  77	     jbd2/mmcblk0p2-	J
+   94.469890222	D	WS	 1064672	 168	  77	     jbd2/mmcblk0p2-	J
+   94.490597889	D	WS	 1064840	   8	  77	     jbd2/mmcblk0p2-	J
+   97.302753577	D	WS	 2846688	   8	13275	     BrowserBlocking	M
+   97.304129368	D	WS	 2846696	  16	13275	     BrowserBlocking	M
+   97.305475743	D	WS	 2846712	  24	13275	     BrowserBlocking	M
+   97.307476910	D	WS	 2846736	  16	13275	     BrowserBlocking	M
+   97.489575579	D	WS	 1064848	  96	  77	     jbd2/mmcblk0p2-	J
+   97.504517370	D	WS	 1064944	   8	  77	     jbd2/mmcblk0p2-	J
+   98.484365210	D	WS	 2846752	  16	13258	     BrowserBlocking	M
+   98.496423586	D	WS	 1064952	 112	  77	     jbd2/mmcblk0p2-	J
+   98.505399961	D	WS	 1065064	   8	  77	     jbd2/mmcblk0p2-	J
+  104.039731544	D	WS	 1065072	  88	  77	     jbd2/mmcblk0p2-	J
+  104.053429169	D	WS	 1065160	   8	  77	     jbd2/mmcblk0p2-	J
+  104.267037963	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+  104.436699923	D	WS	 2937496	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  104.437819173	D	WS	 2937512	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  104.439037507	D	WS	 2937520	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  104.440537548	D	WS	 2846768	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  104.445093756	D	WS	 1065168	  40	  77	     jbd2/mmcblk0p2-	J
+  104.447602298	D	WS	 2103688	   8	  77	     jbd2/mmcblk0p2-	D	/anr/traces.txt
+  104.449773465	D	WS	 1065208	   8	  77	     jbd2/mmcblk0p2-	J
+  104.452119840	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+  109.575374921	D	WS	 2103752	   8	  77	     jbd2/mmcblk0p2-	D	/anr/traces.txt
+  109.576772129	D	WS	 1065216	  72	  77	     jbd2/mmcblk0p2-	J
+  109.592514796	D	WS	 1065288	   8	  77	     jbd2/mmcblk0p2-	J
+  109.811690880	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  109.867734964	D	WS	 2936912	  16	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.103066382	D	WS	 1065296	  24	  77	     jbd2/mmcblk0p2-	J
+  110.107151840	D	WS	 1065320	   8	  77	     jbd2/mmcblk0p2-	J
+  110.244550425	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.257177884	D	WS	 2655384	   8	13358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+  110.258842676	D	WS	 2790952	   8	13358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+  110.305213884	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.316345925	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.317568801	D	WS	 2936912	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.318827842	D	WS	 2936920	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  110.954303681	D	WS	 1065328	  56	  77	     jbd2/mmcblk0p2-	J
+  110.969915806	D	WS	 1065384	   8	  77	     jbd2/mmcblk0p2-	J
+  111.010335639	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  111.016627639	D	WS	 2655384	   8	13358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+  111.019001389	D	WS	 2931584	   8	13358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db
+  111.024437639	D	WS	 2936904	   8	113358	     pool-1-thread-3	D	/data/com.tencent.android.qqdownloader/databases/eup_db-journal
+  115.509111091	D	WS	 1065392	 168	  77	     jbd2/mmcblk0p2-	J
+  115.625065050	D	WS	 1065560	   8	  77	     jbd2/mmcblk0p2-	J
+  115.672121300	D	WS	 2846792	   8	413258	     BrowserBlocking	M
+  115.711126550	D	WS	 1065568	  48	  77	     jbd2/mmcblk0p2-	J
+  115.721064092	D	WS	 1065616	   8	  77	     jbd2/mmcblk0p2-	J
+  115.783883759	D	WS	 1065624	  40	  77	     jbd2/mmcblk0p2-	J
+  115.791695051	D	WS	 1065664	   8	  77	     jbd2/mmcblk0p2-	J
+  115.813158968	D	WS	 2846800	   8	13258	     BrowserBlocking	M
+  115.815907551	D	WS	 1065672	  32	  77	     jbd2/mmcblk0p2-	J
+  115.818604009	D	WS	 1065704	   8	  77	     jbd2/mmcblk0p2-	J
+  115.826018509	D	WS	 2846808	   8	413258	     BrowserBlocking	M
+  115.836946093	D	WS	 1065712	  48	  77	     jbd2/mmcblk0p2-	J
+  115.850535968	D	WS	 1065760	   8	  77	     jbd2/mmcblk0p2-	J
+  119.999829958	D	WS	 2846840	   8	13448	     GeofencerStateM	M
+  120.007649291	D	WS	 1065768	 128	  77	     jbd2/mmcblk0p2-	J
+  120.020033916	D	WS	 1065896	   8	  77	     jbd2/mmcblk0p2-	J
+  120.072450625	D	WS	 2846848	   8	13448	     GeofencerStateM	M
+  120.136478209	D	WS	 1065904	  72	  77	     jbd2/mmcblk0p2-	J
+  120.248968002	D	WS	 1065976	   8	  77	     jbd2/mmcblk0p2-	J
+  125.709848168	D	WS	 1065984	  80	  77	     jbd2/mmcblk0p2-	J
+  125.719480044	D	WS	 1066064	   8	  77	     jbd2/mmcblk0p2-	J
+  130.756123498	D	WS	 1066072	 112	  77	     jbd2/mmcblk0p2-	J
+  130.871240583	D	WS	 1066184	   8	  77	     jbd2/mmcblk0p2-	J
+  131.147198627	D	WS	 2846936	   8	13237	        AsyncTask #3	M
+  131.151718669	D	WS	 1066192	  80	  77	     jbd2/mmcblk0p2-	J
+  131.163811044	D	WS	 1066272	   8	  77	     jbd2/mmcblk0p2-	J
+  131.963035799	D	WS	 2846944	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/http_www.rpiathletics.com_0.localstorage-journal
+  131.971821382	D	WS	 1066280	 104	  77	     jbd2/mmcblk0p2-	J
+  131.982780966	D	WS	 1066384	   8	  77	     jbd2/mmcblk0p2-	J
+  132.008911133	D	WS	 1066392	   8	  77	     jbd2/mmcblk0p2-	J
+  132.011013966	D	WS	 2846944	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/http_www.rpiathletics.com_0.localstorage-journal
+  132.013921800	D	WS	 2846952	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/http_www.rpiathletics.com_0.localstorage
+  132.016840508	D	WS	 1066400	  32	  77	     jbd2/mmcblk0p2-	J
+  132.024462133	D	WS	 1066432	   8	  77	     jbd2/mmcblk0p2-	J
+  132.026872550	D	WS	 2846944	   8	13336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Local Storage/http_www.rpiathletics.com_0.localstorage-journal
+  136.318921707	D	WS	 2846960	   8	13258	     BrowserBlocking	M
+  136.320066999	D	WS	 2846968	  16	13258	     BrowserBlocking	M
+  136.321339415	D	WS	 2846984	  16	13258	     BrowserBlocking	M
+  136.322395832	D	WS	 2847000	  16	13258	     BrowserBlocking	M
+  136.323493165	D	WS	 2847016	   8	13258	     BrowserBlocking	M
+  136.328370624	D	WS	 1066440	  72	  77	     jbd2/mmcblk0p2-	J
+  136.337710833	D	WS	 1845416	   8	  77	     jbd2/mmcblk0p2-	D	/data/com.android.chrome/app_chrome/Default/Session Storage/000003.log
+  136.339623375	D	WS	 1066512	   8	  77	     jbd2/mmcblk0p2-	J
+  136.794506003	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+  136.798086878	D	WS	 2366752	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  136.799735628	D	WS	 2366760	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  136.800687003	D	WS	 2366776	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  136.802201336	D	WS	 2366880	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  136.847839753	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+  136.855324669	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+  136.861402629	D	WS	 2937512	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  136.862344129	D	WS	 2937520	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons
+  136.867036045	D	WS	 2937488	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/Favicons-journal
+  142.262729045	D	WS	 1066520	 144	  77	     jbd2/mmcblk0p2-	J
+  142.279319795	D	WS	 1066664	   8	  77	     jbd2/mmcblk0p2-	J
+  145.617381986	D	WS	 2847064	  16	13258	     BrowserBlocking	M
+  145.627919070	D	WS	 1066672	 152	  77	     jbd2/mmcblk0p2-	J
+  145.686389613	D	WS	 1066824	   8	  77	     jbd2/mmcblk0p2-	J
+  147.720079169	D	WS	 2847080	  56	13336	     BrowserBlocking	M
+  147.724453044	D	WS	 2847136	   8	13336	     BrowserBlocking	M
+  147.804991003	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+  147.967688255	D	WS	 1066832	  96	  77	     jbd2/mmcblk0p2-	J
+  147.983728630	D	WS	 1066928	   8	  77	     jbd2/mmcblk0p2-	J
+  148.027457047	D	WS	 2366752	  16	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  148.029604547	D	WS	 2366776	  24	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  148.031139588	D	WS	 2366880	   8	13274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History
+  148.043277089	D	WS	 2937472	   8	113274	     Chrome_HistoryT	D	/data/com.android.chrome/app_chrome/Default/History-journal
+  153.317845712	D	WS	 2847144	   8	  77	     jbd2/mmcblk0p2-	M
+  153.321920837	D	WS	 1066936	 128	  77	     jbd2/mmcblk0p2-	J
+  153.334543795	D	WS	 1067064	   8	  77	     jbd2/mmcblk0p2-	J
+  153.472840546	D	WS	 2847160	   8	13238	        AsyncTask #4	M
+  153.486514755	D	WS	 1067072	  64	  77	     jbd2/mmcblk0p2-	J
+  153.495101255	D	WS	 1067136	   8	  77	     jbd2/mmcblk0p2-	J
+  158.229897541	D	WS	 2845376	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+  158.231592917	D	WS	 2845952	   8	113336	     BrowserBlocking	D	/data/com.android.chrome/app_chrome/Default/Origin Bound Certs-journal
+  158.244362333	D	WS	 1067144	  88	  77	     jbd2/mmcblk0p2-	J
