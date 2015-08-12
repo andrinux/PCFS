@@ -38,12 +38,12 @@ extern dedup_hash_t dedup_database;
 
 void *thread_compress(void *arg);
 
-#define FUSECOMPRESS_PREFIX "._fC"
+#define PCFS_PREFIX "._fC"
 
-#define TEMP FUSECOMPRESS_PREFIX "tmp"		/* Template is: ._.tmpXXXXXX */
+#define TEMP PCFS_PREFIX "tmp"		/* Template is: ._.tmpXXXXXX */
 #define FUSE ".fuse_hidden"	/* Temporary FUSE file */
-#define DEDUP_DB_FILE FUSECOMPRESS_PREFIX "dedup_db"
-#define DEDUP_ATTR FUSECOMPRESS_PREFIX "at_"
+#define DEDUP_DB_FILE PCFS_PREFIX "dedup_db"
+#define DEDUP_ATTR PCFS_PREFIX "at_"
 
 extern char compresslevel[];
 #define COMPRESSLEVEL_BACKGROUND (compresslevel) /* See above, this is for background compress */

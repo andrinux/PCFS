@@ -1,7 +1,5 @@
 /*
-    FuseCompress
-    Copyright (C) 2005 Milan Svoboda <milan.svoboda@centrum.cz>
-    (C) 2009, 2011 Ulrich Hecht <uli@suse.de>
+    PCFS
 */
 
 #include "config.h"
