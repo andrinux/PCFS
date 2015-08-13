@@ -1,4 +1,5 @@
 //gcc -Wall testZlib.c -o test -lz
+//Code to use 4kB compression.
 
 #include <stdio.h>
 #include <time.h>
@@ -10,9 +11,16 @@
 
 
 #define LEN 4096
+#define PAGE_SIZE (4096)
+
 
 unsigned char DATA_BUFFER[LEN];
 unsigned char BUFFER[LEN];
+
+struct compBlk{
+	Bytef dst[PAGE_SIZE];
+	uLong dst_len;
+};
 
 void testCompress()
 {
@@ -39,9 +47,11 @@ void testCompress()
 	//BUFFER is used to store the 4KB data read from original file.
 	int i = 0;
     while((nchar = read(fin, BUFFER, LEN))>0){
-		uLong dst_len = LEN;
+		uLong dst_len = 0;
 		Bytef* dst=(Bytef*) DATA_BUFFER;
-		if (Z_OK == compress(dst, &dst_len, (Bytef*)BUFFER, (uLong) LEN)){
+		int ret =compress(dst, &dst_len, (Bytef*)BUFFER, (uLong) LEN);
+		printf("Ret is %d\n", ret);
+		if (Z_OK == ret){
 			write(fout, DATA_BUFFER, dst_len);
 			printf("%ld-, ", dst_len);
             i++;
@@ -89,10 +99,23 @@ void testDecompress()
 
 }
 
+void getVal(struct compBlk * Blks, int count){
+	Blks =  (struct compBlk*) malloc (count * sizeof(struct compBlk));
+	int index = 0;
+	for(index =0; index < count; index++){
+		(Blks + index)->dst_len = index *10;
+	}
+	printf("Test Memory: %ld\n",(Blks+4)->dst_len);
+}
+
 //===================Main Function of Test ================
 int main()
 {
+	//struct compBlk *Blks;
+	//getVal(Blks, 10);
+	printf("%ld\n", sizeof(short));
 	testCompress();
 	testDecompress();
+	//printf("Test Memory: %ld\n",(Blks+4)->dst_len);
 	return 0;
 }
