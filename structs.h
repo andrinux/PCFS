@@ -1,15 +1,12 @@
 /** @file
  *
- * FuseCompress
- * Copyright (C) 2005 Milan Svoboda <milan.svoboda@centrum.cz>
- * (C) 2011 Ulrich Hecht <uli@suse.de>
- *
  */
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
 #include <pthread.h>
 #include <sys/types.h>
+#include <zlib.h>
 
 #include "list.h"
 
@@ -42,6 +39,16 @@
 # define NEED_RD_LOCK(lock)
 #endif
 
+#ifndef PAGE_SIZE
+#define PAGE_SIZE (4096)
+#endif
+
+struct compBlk{
+	Bytef dst[PAGE_SIZE];
+	uLongf dst_len;
+	Bytef flag; //If uncompressable, set flag as 0, otherwise 1.
+};
+
 typedef struct
 {
 	char type;		// ID of compression module
@@ -53,6 +60,8 @@ typedef struct
 	int (*close)(void *file);
 	int (*read)(void *file, void *buf, unsigned int len);
 	int (*write)(void *file, void *buf, unsigned int len);
+	int (*read4K)(void *file, void *buf, unsigned int len);
+	int (*write4K)(void *file, void *buf, unsigned int len);
 
 } compressor_t;
 
@@ -61,7 +70,8 @@ typedef struct
 	char id[3];		// ID of FuseCompress format
 	unsigned char type;	// ID of used compression module
 	off_t size;		// Uncompressed size of the file in bytes
-
+	unsigned char *cFlags;
+	short *offsets; //Debug purpose, offset of 1st compressed blk
 } __attribute__((packed)) header_t;
 
 #define READ		(1 << 1)
@@ -157,7 +167,7 @@ typedef struct {
 #define DATABASE_HASH_QUEUE_T uint16_t
 
 /** Deduplication hash table.
- * Files are hashed by their MD5 sum and their fusecompress filename hash,
+ * Files are hashed by their MD5 sum and their PCFS filename hash,
  * allowing fast lookup by both content (for deduplication) and name (for 
  * deduplicated file modification).
  */
