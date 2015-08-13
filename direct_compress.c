@@ -106,7 +106,11 @@ int pageCompression(file_t *file, descriptor_t *descriptor, const void *buf, siz
 	free(tmpBuf);
 	return nchar;
 }
-
+/*
+* Read compressed data chunks and do decompression.
+* The compression flags are stored inside the file metadata.
+* Metadata is stored seperatrly with file data.
+*/
 
 int pageDecompression(int fd, Bytef* buf, uLong size)
 {

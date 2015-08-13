@@ -65,6 +65,7 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
 	fh.id[2] = '\211';
 	fh.type = compressor->type;
 	fh.size = to_le64(size);
+	//write cFlags and offsets?
 
 	DEBUG_("writing header to %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
 	ret = write(fd, &fh, sizeof(fh));

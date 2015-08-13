@@ -54,6 +54,8 @@ static int cmpdirFd;	// Open fd to cmpdir for fchdir.
 
 //Get the file size given a const char path.
 //off_t is defined as long int.
+//For compressed file, this way may not be a good method...
+//So just visit descriptor->size.
 off_t PCFS_getFileSize(const char* path)
 {
 	struct stat *stbuf = (struct stat*) malloc (sizeof(struct stat));
