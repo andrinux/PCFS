@@ -43,11 +43,18 @@
 #define PAGE_SIZE (4096)
 #endif
 
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+
+
+
+
 struct compBlk{
 	Bytef dst[PAGE_SIZE];
 	uLongf dst_len;
 	Bytef flag; //If uncompressable, set flag as 0, otherwise 1.
 };
+typedef struct compBlk Blk_t; 
 
 typedef struct
 {

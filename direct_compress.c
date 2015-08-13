@@ -33,14 +33,131 @@ unsigned char DATA_BUFFER[PAGE_SIZE];
 
 /*
 * Implementation of 4KB compression, store the result into 
-* @ tBUFFER: is the tmp Buffer hold all the compBlks
-* @ fBUFFER: is the data will be written into file.
+* @ buf: the input data.
+* @ tBuf: is the tmp Buffer hold all the compBlks
+* @ fBUF: is the data will be written into file.
 * @ Flags: compression flags of each 4K.
 * @ Offsets:For debugging purpose, the offset of the first 4K. PAGE_SIZE is 4096
 * To begin, use a memory-cost way to compress: hold all the cmpBlks instead of on-the-fly compress
 //int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, size_t size, off_t offset)
 */
-int pageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
+size_t PageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
+{
+	struct compBlk* tBUF = NULL;
+	struct compBlk* fBUF = NULL;
+	unsigned char* Flags = NULL; //@ 1: compressed. 0: no compressed.
+	unsigned short * Offsets = NULL;//@ 0->4096: compressed. 4096: no compression
+	
+	/*
+	* The size after compression is tricky for the final page.(c'z that the final page is < 4096)
+	*/
+	size_t cSize = 0; // the size after compression.
+	int pageUsed =0;
+	
+	//initialization of buffer memory
+	int count = size/PAGE_SIZE;
+	tBUF = (struct compBlk*) malloc((1 + count) * sizeof(struct compBlk));
+	if(!tBUF){
+		DEBUG_("Memory Error on tBUFFER allocation.\n");
+		return FAIL;
+	}
+	
+	fBUF = (struct compBlk*) malloc((1 + count) * sizeof(struct compBlk));
+	if(!fBUF){
+		DEBUG_("Memory Error on fBUFFER allocation.\n");
+		return FAIL;
+	}
+	
+	Flags	= (unsigned char*) malloc((1 + count) * sizeof(unsigned char));
+	if(!Flags){
+		DEBUG_("Memory Error on Flags allocation.\n");
+		return FAIL;
+	}
+	
+	Offsets = (unsigned short*)malloc((1 + count) * sizeof(unsigned short));
+	if(!Offsets){
+		DEBUG_("Memory Error on Offsets allocation.\n");
+		return FAIL;
+	}
+	
+	pageUsed= doPageLevelCompression(tBUF, fBUF, Flags, Offsets, buf, size);
+	
+	return pageUsed;
+}
+
+// Do Page level compression and store the results in these four buffers.
+// Support one-time sequential write.  
+// retval is count of effective blocks.
+int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offsets, 
+						   const void *buf, size_t size )
+{
+	int index = 0;
+	int fCnt = 0;
+	struct compBlk* curBlk;
+	int count = size/PAGE_SIZE;
+	for(index = 0; index <= count; index++){
+		//Initialize cBlk
+		memset(tBUF[index].dst, 0, PAGE_SIZE);
+		tBUF[index].dst_len =  2*PAGE_SIZE;
+		
+		//From (buf + index*PAGE_SIZE)
+		curBlk = tBUF + index;
+		uLong blkSize = (index < count)? PAGE_SIZE : size % PAGE_SIZE;
+		
+		int ret = compress(curBlk->dst, &curBlk->dst_len, 
+						   (Bytef*) (buf + index*PAGE_SIZE), (uLong) blkSize);
+		
+		if(curBlk->dst_len <= PAGE_SIZE) 
+			curBlk->flag = 1;
+		else
+			curBlk->flag = 0;
+		
+		DEBUG_("@doPageLevelCompression: Ret is %d. dst_len is %ld.", ret, curBlk->dst_len);
+		if(Z_OK != ret ){
+			DEBUG_("@doPageLevelCompression: %d block Error.\n",index);
+			return FAIL;
+		}else{
+			DEBUG_("%2d Block: %ld becomes %ld bytes.\n",
+				   index, blkSize, curBlk->dst_len);
+		}
+	}
+	
+	//So far, finished all the 4kB blocks compression and begin reorganising work.
+	//tBUF->fBUF, update Offsets, update cFlags
+	int cur = 0;
+	while(cur < count){
+		curBlk = fBUF + fCnt;
+		memset(curBlk->dst, 0, PAGE_SIZE);
+		
+		//assert(cur < count);
+		if(tBUF[cur].dst_len + tBUF[cur+1].dst_len <= PAGE_SIZE){
+			memcpy(curBlk->dst, tBUF[cur].dst, tBUF[cur].dst_len);
+			memcpy(curBlk->dst + tBUF[cur].dst_len, tBUF[cur+1].dst, tBUF[cur+1].dst_len);
+			
+			//padding.
+			memset(curBlk->dst + tBUF[cur].dst_len + tBUF[cur+1].dst_len, 0, (PAGE_SIZE - tBUF[cur].dst_len - tBUF[cur+1].dst_len));
+			cur = cur + 2;
+			Flags[fCnt] = 1;
+			Offsets[fCnt] = tBUF[cur].dst_len;
+		}else{
+			//uncompressed
+			memcpy(DATA_BUFFER, buf + cur*PAGE_SIZE, PAGE_SIZE);
+			cur++;
+			Flags[fCnt] = 0;
+			Offsets[fCnt] = PAGE_SIZE;
+		}
+		fBUF[fCnt].dst_len = 0; //Effective data(including padding 0).
+		fCnt++;
+	}
+	
+	//Reorganising finished.
+	return fCnt;
+}
+
+
+
+//obsolete code segment
+int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
 {
 	//offset maybe not integer times of PAGE_SIZE, in this case. ignore first, only sequential write.
 	int fd = descriptor->fd;
