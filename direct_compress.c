@@ -27,6 +27,9 @@
 #define IMPOS_VAL (-99)
 #endif
 
+unsigned char DATA_BUFFER[PAGE_SIZE];
+
+#define SEG 10 //For Debug Purpose.
 
 /*
 * Implementation of 4KB compression, store the result into 
@@ -37,7 +40,115 @@
 * To begin, use a memory-cost way to compress: hold all the cmpBlks instead of on-the-fly compress
 //int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, size_t size, off_t offset)
 */
+int pageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
+{
+	//offset maybe not integer times of PAGE_SIZE, in this case. ignore first, only sequential write.
+	int fd = descriptor->fd;
+	int count =  size / PAGE_SIZE; //index: 0->count
+	int index = 0;
+	int nchar = 0;
+	//Create count CompBlocks, do we need initialize here?
+	struct compBlk* cBlk;
+	Bytef* tmpBuf;
+	cBlk = (struct compBlk*) malloc((1+count)*sizeof(struct compBlk));
+	for(index = 0; index <= count; index++){
+		//Initialize cBlk
+		memset(cBlk[index].dst, 0, PAGE_SIZE);
+		cBlk[index].dst_len =  2*PAGE_SIZE;
+		//From (buf + index*PAGE_SIZE)
+		struct compBlk* curBlk = cBlk + index;
+		uLong blkSize = (index < count)? PAGE_SIZE : size % PAGE_SIZE;
 
+		tmpBuf=(Bytef*) malloc(sizeof(Bytef) * 2*4096);
+		int ret = compress(curBlk->dst, &curBlk->dst_len, 
+						   (Bytef*) (buf + index*PAGE_SIZE), (uLong) blkSize);
+		if(curBlk->dst_len <= PAGE_SIZE) 
+			curBlk->flag = 1;
+		else
+			curBlk->flag = 0;
+		DEBUG_("Ret is %d. dst_len is %ld.", ret, curBlk->dst_len);
+		if(Z_OK != ret ){
+			DEBUG_("%d block Error.\n",index);
+			return FAIL;
+		}else{
+			DEBUG_("%2d Block: %ld becomes %ld bytes.\n",
+				   index, blkSize, curBlk->dst_len);
+		}
+	}
+	//The compressed data are stored in cBlk[0:count] now.
+	//Reorgranise and write to file.
+	int cur = 0;
+	while(cur < count){
+		memset(DATA_BUFFER, 0, PAGE_SIZE);
+		//assert(cur < count);
+		if(cBlk[cur].dst_len + cBlk[cur+1].dst_len <= PAGE_SIZE){
+			memcpy(DATA_BUFFER, cBlk[cur].dst, cBlk[cur].dst_len);
+			memcpy(DATA_BUFFER + cBlk[cur].dst_len, cBlk[cur+1].dst, cBlk[cur+1].dst_len);
+			//padding.
+			memset(DATA_BUFFER + cBlk[cur].dst_len + cBlk[cur+1].dst_len, 0, (PAGE_SIZE - cBlk[cur].dst_len - cBlk[cur+1].dst_len));
+			cur = cur + 2;
+		}else{
+			//uncompressed
+			memcpy(DATA_BUFFER, buf+cur*PAGE_SIZE, PAGE_SIZE);
+			cur++;
+		}		
+		nchar = write(fd, DATA_BUFFER, PAGE_SIZE);
+		DEBUG_("Write %d Bytes.Now cur = %d.\n", nchar, cur);
+	}
+	if(cur == count){
+		memcpy(DATA_BUFFER, buf+cur*PAGE_SIZE, PAGE_SIZE);
+		nchar = write(fd, DATA_BUFFER, PAGE_SIZE);
+		DEBUG_("Write %d Bytes. Now cur = %d.\n", nchar, cur);
+	}
+	if(cur > count){
+		DEBUG_("cur>count now. Do nothing.\n");
+	}
+	free(tmpBuf);
+	return nchar;
+}
+
+
+int pageDecompression(int fd, Bytef* buf, uLong size)
+{
+	int count = size / PAGE_SIZE;
+	int index = 0;
+	Bytef decBuf[PAGE_SIZE * 2] = { 0 };
+	uLong decLen1 = PAGE_SIZE;
+	uLong decLen2 = PAGE_SIZE;
+	//Store the compression information: offset and flag.
+	uLong offset[SEG]={873, 657, 727, 749, 910, 821};
+	int FLAG[SEG] = {1, 1, 1, 1, 1, 1};
+	int ret1 = -99, ret2 = -99;
+	int nchar = 0;
+	int total = 0;
+	while(index < count){
+		memset(decBuf, 0, PAGE_SIZE * 2);
+		//Need to find a way to continue decompressing for two sectors.
+		uLong inLen = PAGE_SIZE;
+		if(FLAG[index] == 1){
+			ret1 = uncompress(decBuf, &decLen1, buf+PAGE_SIZE*index, inLen);
+			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
+							  buf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
+			printf("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
+		}else{
+			//no compression
+			ret1 = Z_OK; ret2 = Z_OK;
+			decLen1 = PAGE_SIZE; decLen2 = 0;
+			memcpy(decBuf, buf+PAGE_SIZE*index, PAGE_SIZE);
+		}
+
+		if(ret1 == Z_OK && ret2 == Z_OK){
+			nchar = write(fd, decBuf, decLen1 + decLen2);
+			total += nchar;
+			index++;
+			printf("Ret is %d, Write %d Bytes into file.\n", ret1, nchar);
+		}else{
+			printf("Ret is %d, Something happened.\n", ret1 + ret2);
+			return FAIL;
+		}
+	}
+	return total;
+}
 
 
 
@@ -646,15 +757,22 @@ int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, 
 		LOCK(&file->lock);
 		return ret;
 	}
+	
+	//***********Do 4KB compression here.**********************
+	//*********Stored compressed data into Buffer**************
+	//*********Write into file in the future*******************
+	
+	//*********************************************************
 
 	// Open file if neccesary
-	//
+	//XZ: the first time, this file is not opened, handle is NULL. so the following would be executed.
 	if (!descriptor->handle)
 	{
 		assert(file->size == 0);
 		assert(descriptor->offset == 0);
-
-		DEBUG_("writing header...");
+		
+		//XZ: why here to write header?
+		DEBUG_("XZ: writing header...");
 
                 /* previous header reads might have advanced the fd to 12 */
 		if (lseek(descriptor->fd, 0, SEEK_SET) < 0) {
