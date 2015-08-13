@@ -711,7 +711,7 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 	int           res;
 	file_t       *file;
 	descriptor_t *descriptor;
-	DEBUG_("XZ: Write Function is triggered.\n");
+	DEBUG_("XZ: Write Function is triggered: Target is %s.\n", path);
 	DEBUG_("('%s') size: %zd, offset: %zd", path, size, offset);
 	STAT_(STAT_WRITE);
 
@@ -722,7 +722,7 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 	assert(file);
 
 	LOCK(&file->lock);
-	
+	//do_compress4K();
 
 	DEBUG_("\tfile->filename: %s", file->filename);
 
@@ -736,17 +736,16 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 	    (offset == 0))
 	{
 		assert(file->compressor == NULL);
-
 		file->compressor = choose_compressor(file);
-
 		DEBUG_("\tcompressor set to %s",
 			file->compressor ? file->compressor->name : "null");
 	}
 	file->dontcompress = TRUE;
-
 	if (file->compressor)
 	{
 		//XZ: do the compression and write to file inside this function.
+		//XZ: The header(including flags and offsets) is generated after
+		//		compression, so we need to do compression first. 
 		res = direct_compress(file, descriptor, buf, size, offset);
 	}
 	else

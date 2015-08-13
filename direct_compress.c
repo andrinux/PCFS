@@ -1,5 +1,3 @@
-
-
 #include <pthread.h>
 #include <assert.h>
 #include <string.h>
@@ -20,6 +18,31 @@
 #include "compress.h"
 #include "background_compress.h"
 #include "utils.h"
+
+#ifndef PAGE_SIZE
+#define PAGE_SIZE (4096)
+#endif
+
+#ifndef IMPOS_VAL
+#define IMPOS_VAL (-99)
+#endif
+
+
+/*
+* Implementation of 4KB compression, store the result into 
+* @ tBUFFER: is the tmp Buffer hold all the compBlks
+* @ fBUFFER: is the data will be written into file.
+* @ Flags: compression flags of each 4K.
+* @ Offsets:For debugging purpose, the offset of the first 4K. PAGE_SIZE is 4096
+* To begin, use a memory-cost way to compress: hold all the cmpBlks instead of on-the-fly compress
+//int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, size_t size, off_t offset)
+*/
+
+
+
+
+
+
 
 /*  MAX_DATABASE_LEN = When the database has this many entries, we clean the database
 
@@ -56,7 +79,6 @@ void direct_open_delete(file_t *file)
 	flush_file_cache(file);
 	
 	// It's out of the database, so we can unlock and destroy it
-	//
 	UNLOCK(&file->lock);
 	pthread_mutex_destroy(&file->lock);
 
@@ -130,7 +152,7 @@ void _direct_open_purge(int force)
 			        LOCK(&file->lock);
 				DEBUG_("Forcing trim from database");
 				DEBUG_("This could happend only in debug mode, "
-				       "when fusecompress was terminated with "
+				       "when PCFS was terminated with "
 				       "some files still opened. Don't report "
 				       "this as bug please.");
 				list_del(&file->list);
@@ -649,8 +671,16 @@ int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, 
 			//exit(EXIT_FAILURE);
 			return FAIL;
 		}
-		
+		//XZ: Format of file handle:
+		/* the return type of gzdopen().
+		struct gzFile_s {
+		 unsigned have;
+		 unsigned char *next;
+		 z_off64_t pos;
+		 };
+		*/		
 		descriptor->handle = file->compressor->open(dup(descriptor->fd), compresslevel);
+		//DEBUG_("XZ: After open, handle offset is %ld\n", descriptor->handle->pos);
 		if (!descriptor->handle)
 		{
 			ERR_("failed to open compressor on fd %d file ('%s')",
@@ -659,12 +689,15 @@ int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, 
 			return FAIL;
 		}
 	}
+
 	assert(descriptor->handle);
-
+	
+	
 	// Do actual compressing
-	//
+	// XZ: Note the 'handle', what is used for? assigned in above, gzdopen return a handle.
+	//gdb to see the content of handle
 	len = file->compressor->write(descriptor->handle, (void *)buffer, size);
-
+	
 	DEBUG_("write requested: %zd, really written: %d", size, len);
 
 	if (len == FAIL)

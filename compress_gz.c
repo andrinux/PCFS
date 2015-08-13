@@ -18,6 +18,7 @@
 
 #define BUF_SIZE 4096
 
+//gzwrite4K
 static int gzwrite4K (void *file, void *buf, unsigned int len)
 {
 	return 0;
