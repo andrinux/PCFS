@@ -69,6 +69,8 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
 
 	DEBUG_("writing header to %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
 	ret = write(fd, &fh, sizeof(fh));
+	//XZ: write c
+	
     //ret = write(fd, &flags, sizeof(flags));
     return ret;
 }
@@ -96,7 +98,7 @@ int file_read_header_fd(int fd, compressor_t **compressor, off_t *size)
 
 	DEBUG_("reading header from %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
 	r = read(fd, &fh, sizeof(fh));
-	if (r == -1)
+	if (r == FAIL)
 		return r;
 
 	if (r == sizeof(fh))

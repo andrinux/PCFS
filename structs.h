@@ -81,8 +81,6 @@ typedef struct
 	unsigned char type;	// ID of used compression module
 	off_t size;		// Uncompressed size of the file in bytes
 	off_t pageUsed; //XZ: how many page used- related to the size of cFlags and cOffsets 
-	uchar *cFlags;
-	ushort *cOffsets; //Debug purpose, offset of 1st compressed blk
 } __attribute__((packed)) header_t;
 
 #define READ		(1 << 1)
@@ -139,6 +137,7 @@ typedef struct {
 	void		*handle;	// for example gzFile
 	
 	int 	cPage; 				//XZ: how many compressed pages used
+	int cSize;					//XZ: how many bytes are there in compressed domain.
 	uchar*  cFlags;
 	ushort* cOffsets; 			//XZ: written in the file header
 	

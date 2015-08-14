@@ -95,9 +95,13 @@ size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *
 	//Do compression
 	pageUsed = doPageLevelCompression(tBUF, fBUF, Flags, Offsets, buf, size);
 	//Update metadata , and write file header
-	
+	descriptor->cPage = pageUsed;
+	descriptor->cFlags = Flags;
+	descriptor->cOffsets=Offsets;
 	//Write file data into disk
-	
+	file_write_header(descriptor->fd,
+						file->compressor,
+						file->size);
 	//After write to file, need to free the mrmory allocated to buffer.
 	
 	//return values
@@ -112,8 +116,10 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 {
 	int index = 0;
 	int fCnt = 0;
+	int totalByte;
 	struct compBlk* curBlk;
 	int count = size/PAGE_SIZE;
+	totalByte = 0;
 	for(index = 0; index <= count; index++){
 		//Initialize cBlk
 		memset(tBUF[index].dst, 0, PAGE_SIZE);
@@ -174,8 +180,9 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 	return fCnt;
 }
 
-int readCompInfo(file_t *file, descriptor_t *descriptor)
+int readCompInfo(file_t *file, descriptor_t *descriptor, uchar* cFlags, ushort* cOffsets)
 {
+	
 	return FAIL;
 }
 /*
@@ -185,29 +192,33 @@ int readCompInfo(file_t *file, descriptor_t *descriptor)
 * Step1: read out the compressed data.(calculate the physical offset)
 * Step2: decompress to buf.
 */
-
+//To begin, let's assume the offsetInFile is sizeof(header_t)
 int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf, size_t size, off_t offsetInFile)
 {
+	ushort * offset = NULL;
+	uchar * FLAG = NULL;
 	//OffsetInfile is offset in uncompressed domain: calculate the offset in compressed domain.
-	readCompInfo(file, descriptor);
+	readCompInfo(file, descriptor, FLAG, offset);
+	//Store the compression information: offset and flag.
 	
+	//ushort * offset = descriptor->cOffsets ;
+	//uchar * FLAG = descriptor->cFlags;
+	int uSize = file->size; //size in uncompressed domain.
+	int cSize = descriptor->cSize;
+	int count = cSize /PAGE_SIZE;
+	Bytef* inbuf = (Bytef*) malloc (cSize * sizeof(Bytef));
 	//Read original compressed data into inbuf
-	
+	if(cSize != read(descriptor->fd, inbuf, cSize)){
+		DEBUG_("compressed data read error.\n");
+		return FAIL;
+	}
 	//do decompression one by one and compose output.
-	
-	
-	int count = size / PAGE_SIZE;
 	int index = 0;
 	
 	Bytef decBuf[DOUBLE_PAGE] = { 0 };
 	uLong decLen1 = PAGE_SIZE;
 	uLong decLen2 = PAGE_SIZE;
-	
-	//Store the compression information: offset and flag.
-	ushort * offset = descriptor->cOffsets ;
-	uchar * FLAG = descriptor->cFlags;
-	//int SEG = descriptor->cPage;
-	
+		
 	int ret1 = IMPOS_VAL, ret2 = IMPOS_VAL;
 	int nchar = 0;
 	int total = 0;
@@ -246,12 +257,8 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 //Step2.
 int doPageLevelDecompression(void *outbuf, void* inbuf,  uchar* Flags, ushort* Offsets, size_t size)
 {
-	
+	return FAIL;
 }
-
-
-
-
 
 
 

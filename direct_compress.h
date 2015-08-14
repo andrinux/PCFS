@@ -6,7 +6,8 @@
 
 #include "structs.h"
 #include "compress.h"
-int readCompInfo(file_t *file, descriptor_t *descriptor);
+
+int readCompInfo(file_t *file, descriptor_t *descriptor, uchar* cFlags, ushort* cOffsets);
 
 size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *buf, 
 					   size_t size, off_t offset);
