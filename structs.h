@@ -132,6 +132,11 @@ typedef struct {
 	int		 flags;		// Needed when we have to reopen fd, this is fi->flags
 
 	void		*handle;	// for example gzFile
+	
+	int 	cPage; 				//XZ: how many compressed pages used
+	uchar*  cFlags;
+	ushort* cOffsets; 			//XZ: written in the file header
+	
 	off_t		 offset;	// offset in file (this if for compression data)
 
 	struct list_head list;

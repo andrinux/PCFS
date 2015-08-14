@@ -162,6 +162,62 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 	return fCnt;
 }
 
+/*
+* Decompression should be easier: just load them one by one into buf.
+* The compression flags are stored inside the file metadata.
+* Step1: read out the compressed data.(calculate the physical offset)
+* Step2: decompress
+*/
+//n
+int PageDecompression(file_t *file, descriptor_t *descriptor, void *buffer, size_t size, off_t offset)
+{
+	int count = size / PAGE_SIZE;
+	int index = 0;
+	
+	Bytef decBuf[PAGE_SIZE * 2] = { 0 };
+	uLong decLen1 = PAGE_SIZE;
+	uLong decLen2 = PAGE_SIZE;
+	
+	//Store the compression information: offset and flag.
+	uLong * offset = descriptor->cOffsets ;
+	int * FLAG = descriptor->cFlags;
+	//int SEG = descriptor->cPage;
+	
+	int ret1 = -99, ret2 = -99;
+	int nchar = 0;
+	int total = 0;
+	
+	while(index < count){
+		memset(decBuf, 0, PAGE_SIZE * 2);
+		//Need to find a way to continue decompressing for two sectors.
+		uLong inLen = PAGE_SIZE;
+		if(FLAG[index] == 1){
+			ret1 = uncompress(decBuf, &decLen1, buf+PAGE_SIZE*index, inLen);
+			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
+							  buf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
+			DEBUG_("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
+		}else{
+			//no compression
+			ret1 = Z_OK; ret2 = Z_OK;
+			decLen1 = PAGE_SIZE; 
+			decLen2 = 0;
+			memcpy(decBuf, buf + PAGE_SIZE*index, PAGE_SIZE);
+		}
+
+		if(ret1 == Z_OK && ret2 == Z_OK){
+			//nchar = write(fd, decBuf, decLen1 + decLen2);
+			
+			total += nchar;
+			index++;
+			DEBUG_("Ret is %d, Write %d Bytes into file.\n", ret1, nchar);
+		}else{
+			DEBUG_("Ret is %d, Something happened.\n", ret1 + ret2);
+			return FAIL;
+		}
+	}
+	return total;
+}
+
 
 
 //| ! | o b s o l e t e |  code
@@ -230,53 +286,6 @@ int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, s
 }
 
 
-/*
-* Read compressed data chunks and do decompression.
-* The compression flags are stored inside the file metadata.
-* Metadata is stored seperatrly with file data.
-*/
-
-int pageDecompression(int fd, Bytef* buf, uLong size)
-{
-	int count = size / PAGE_SIZE;
-	int index = 0;
-	Bytef decBuf[PAGE_SIZE * 2] = { 0 };
-	uLong decLen1 = PAGE_SIZE;
-	uLong decLen2 = PAGE_SIZE;
-	//Store the compression information: offset and flag.
-	uLong offset[SEG]={873, 657, 727, 749, 910, 821};
-	int FLAG[SEG] = {1, 1, 1, 1, 1, 1};
-	int ret1 = -99, ret2 = -99;
-	int nchar = 0;
-	int total = 0;
-	while(index < count){
-		memset(decBuf, 0, PAGE_SIZE * 2);
-		//Need to find a way to continue decompressing for two sectors.
-		uLong inLen = PAGE_SIZE;
-		if(FLAG[index] == 1){
-			ret1 = uncompress(decBuf, &decLen1, buf+PAGE_SIZE*index, inLen);
-			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
-							  buf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
-			printf("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
-		}else{
-			//no compression
-			ret1 = Z_OK; ret2 = Z_OK;
-			decLen1 = PAGE_SIZE; decLen2 = 0;
-			memcpy(decBuf, buf+PAGE_SIZE*index, PAGE_SIZE);
-		}
-
-		if(ret1 == Z_OK && ret2 == Z_OK){
-			nchar = write(fd, decBuf, decLen1 + decLen2);
-			total += nchar;
-			index++;
-			printf("Ret is %d, Write %d Bytes into file.\n", ret1, nchar);
-		}else{
-			printf("Ret is %d, Something happened.\n", ret1 + ret2);
-			return FAIL;
-		}
-	}
-	return total;
-}
 
 
 
@@ -603,8 +612,7 @@ int direct_decompress(file_t *file, descriptor_t *descriptor, void *buffer, size
 	assert(descriptor);
 	assert(descriptor->fd != -1);
 
-	/* This should not happen, except for direct I/O. I cannot get direct I/O to work at all,
-	   though, so I cannot check. May be superfluous. */
+
 	if(offset % DC_PAGE_SIZE != 0 || size % DC_PAGE_SIZE != 0)
 	{
 		//DEBUG_ON
