@@ -1034,18 +1034,6 @@ static void sigterm_handler(int sig)
 	UNLOCK(&database.lock);
 }
 
-/* Sets a SIGTERM handler to keep PCFS from exiting on a SIGTERM.
-   A typical problem with FUSE filesystems mounted on / is that init scripts
-   send a SIGTERM (and, if the process survives, a SIGKILL) to all processes
-   before unmounting the filesystems. Normally, FUSE filesystems terminate
-   when receiving SIGTERM, which is very undesirable in this case. I have
-   therefore added the "noterm" option which instead takes SIGTERM as a cue
-   to flush as much as possible from the database to prevent long delays
-   while files in the database are compressed by the background thread.
-   (SIGKILL is even more disastrous as it will most likely result in data
-   corruption, but it cannot be handled by us. Instead, a fix to killall5
-   is necessary that exempts FUSE filesystems from being SIGKILLed.
-   See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=476698 .) */
 static int set_sigterm_handler(void)
 {
 	struct sigaction sa;
