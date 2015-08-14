@@ -75,12 +75,14 @@ typedef struct
 
 } compressor_t;
 
+//The data written as the header. following by cFlags. cOffsets.
 typedef struct
 {
 	char id[3];		// ID of FuseCompress format
 	unsigned char type;	// ID of used compression module
 	off_t size;		// Uncompressed size of the file in bytes
-	off_t pageUsed; //XZ: how many page used- related to the size of cFlags and cOffsets 
+	off_t pageUsed; //XZ: how many page used- related to the size of cFlags and cOffsets
+	off_t cSize;	//XZ: size in compressed domain.
 } __attribute__((packed)) header_t;
 
 #define READ		(1 << 1)
@@ -106,7 +108,6 @@ typedef struct {
 	int		 accesses;	/**< Number of accesses to this file (number of descriptor_t in
 					     the `list` */
 	off_t		 size;		/**< Filesize, if 0 then not read */
-	off_t		cSize;    /*size after compression*/
 	compressor_t	*compressor;	/**< NULL if file isn't compressed */
 	off_t		 skipped;	/**< Number of bytes read and discarded while seeking */
 	int		 dontcompress;
@@ -137,11 +138,12 @@ typedef struct {
 	void		*handle;	// for example gzFile
 	
 	int 	cPage; 				//XZ: how many compressed pages used
-	int cSize;					//XZ: how many bytes are there in compressed domain.
+	int 	cSize;				//XZ: how many bytes are there in compressed domain.
 	uchar*  cFlags;
 	ushort* cOffsets; 			//XZ: written in the file header
 	
 	off_t		 offset;	// offset in file (this if for compression data)
+	off_t		header_offset; //size of header, including (2)cFlags and (3)cOffsets and (1)header_t
 
 	struct list_head list;
 } descriptor_t;
