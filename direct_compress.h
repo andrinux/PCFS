@@ -12,7 +12,7 @@ int readCompInfo(file_t *file, descriptor_t *descriptor, uchar* cFlags, ushort* 
 size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *buf, 
 					   size_t size, off_t offset);
 
-int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offsets, 
+size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offsets, 
 						const void *buf, size_t size);
 
 int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *buf, size_t size, 
