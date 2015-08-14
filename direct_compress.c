@@ -171,7 +171,7 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 	//So far, finished all the 4kB blocks compression and begin PACKING work.
 	//tBUF->fBUF, update Offsets, update cFlags
 	int cur = 0;
-	while(cur  1 < count){
+	while(cur + 1 < count){
 		curBlk = fBUF + fCnt;
 		memset(curBlk->dst, 0, PAGE_SIZE);
 		
@@ -185,21 +185,29 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 				   (PAGE_SIZE - tBUF[cur].dst_len - tBUF[cur+1].dst_len));
 			//iteration.
 			cur = cur + 2;
-			Flags[fCnt] = 1;
+			Flags[fCnt] = COMPRESSED;
 			Offsets[fCnt] = tBUF[cur].dst_len;
 			cSize += PAGE_SIZE;
 		}else{
 			//uncompressed -or- the final page: 
 			memcpy(curBlk->dst, buf + cur*PAGE_SIZE, PAGE_SIZE);
 			cur = cur + 1;
-			Flags[fCnt] = 0;
+			Flags[fCnt] = UNCOMPRESSED;
 			Offsets[fCnt] = PAGE_SIZE;
+			cSize += PAGE_SIZE;
 		}
-		fBUF[fCnt].dst_len = 0; //Effective data(including padding 0).
+		fBUF[fCnt].dst_len = PAGE_SIZE; //Effective data(including padding 0).
 		fCnt++;		
 	}
+	//the final page. could be compressed or not.
+	//copy directly.
 	if(cur = count-1){
-		
+		curBlk = fBUF + fCnt;
+		memcpy(curBlk->dst, tBUF[cur].dst, tBUF[cur].dst_len);
+		Flags[fCnt] = tBUF[cur]->flag;
+		Offsets[fCnt] = tBUF[cur]->dst_len;
+		fCnt++;
+		cSize+= tBUF[cur]->dst_len;
 	}
 	
 	//Reorganising finished.
