@@ -80,8 +80,15 @@ size_t PageCompression(file_t *file, descriptor_t *descriptor, const void *buf, 
 		return FAIL;
 	}
 	
-	pageUsed= doPageLevelCompression(tBUF, fBUF, Flags, Offsets, buf, size);
+	//Do compression
+	pageUsed = doPageLevelCompression(tBUF, fBUF, Flags, Offsets, buf, size);
+	//Update metadata , and write file header
 	
+	//Write file data into disk
+	
+	//After write to file, need to free the mrmory allocated to buffer.
+	
+	//return values
 	return pageUsed;
 }
 
@@ -89,7 +96,7 @@ size_t PageCompression(file_t *file, descriptor_t *descriptor, const void *buf, 
 // Support one-time sequential write.  
 // retval is count of effective blocks.
 int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offsets, 
-						   const void *buf, size_t size )
+						   const void *buf, size_t size)
 {
 	int index = 0;
 	int fCnt = 0;
@@ -113,6 +120,7 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 			curBlk->flag = 0;
 		
 		DEBUG_("@doPageLevelCompression: Ret is %d. dst_len is %ld.", ret, curBlk->dst_len);
+		
 		if(Z_OK != ret ){
 			DEBUG_("@doPageLevelCompression: %d block Error.\n",index);
 			return FAIL;
@@ -141,7 +149,7 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 			Offsets[fCnt] = tBUF[cur].dst_len;
 		}else{
 			//uncompressed
-			memcpy(DATA_BUFFER, buf + cur*PAGE_SIZE, PAGE_SIZE);
+			memcpy(curBlk->dst, buf + cur*PAGE_SIZE, PAGE_SIZE);
 			cur++;
 			Flags[fCnt] = 0;
 			Offsets[fCnt] = PAGE_SIZE;
@@ -156,7 +164,7 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 
 
 
-//obsolete code segment
+//| ! | o b s o l e t e |  code
 int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
 {
 	//offset maybe not integer times of PAGE_SIZE, in this case. ignore first, only sequential write.
@@ -166,7 +174,6 @@ int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, s
 	int nchar = 0;
 	//Create count CompBlocks, do we need initialize here?
 	struct compBlk* cBlk;
-	Bytef* tmpBuf;
 	cBlk = (struct compBlk*) malloc((1+count)*sizeof(struct compBlk));
 	for(index = 0; index <= count; index++){
 		//Initialize cBlk
@@ -176,7 +183,6 @@ int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, s
 		struct compBlk* curBlk = cBlk + index;
 		uLong blkSize = (index < count)? PAGE_SIZE : size % PAGE_SIZE;
 
-		tmpBuf=(Bytef*) malloc(sizeof(Bytef) * 2*4096);
 		int ret = compress(curBlk->dst, &curBlk->dst_len, 
 						   (Bytef*) (buf + index*PAGE_SIZE), (uLong) blkSize);
 		if(curBlk->dst_len <= PAGE_SIZE) 
@@ -218,11 +224,12 @@ int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, s
 		DEBUG_("Write %d Bytes. Now cur = %d.\n", nchar, cur);
 	}
 	if(cur > count){
-		DEBUG_("cur>count now. Do nothing.\n");
+		DEBUG_("cur > count now. Do nothing.\n");
 	}
-	free(tmpBuf);
 	return nchar;
 }
+
+
 /*
 * Read compressed data chunks and do decompression.
 * The compression flags are stored inside the file metadata.
