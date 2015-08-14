@@ -23,6 +23,18 @@
 #define PAGE_SIZE (4096)
 #endif
 
+#ifndef DOUBLE_PAGE
+#define DOUBLE_PAGE (PAGE_SIZE*2)
+#endif
+
+#ifndef COMPRESSED 
+#define COMPRESSED 1
+#endif
+
+#ifndef UNCOMPRESSED
+#define UNCOMPRESSED 0
+#endif
+
 #ifndef IMPOS_VAL
 #define IMPOS_VAL (-99)
 #endif
@@ -41,7 +53,7 @@ unsigned char DATA_BUFFER[PAGE_SIZE];
 * To begin, use a memory-cost way to compress: hold all the cmpBlks instead of on-the-fly compress
 //int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, size_t size, off_t offset)
 */
-size_t PageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
+size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
 {
 	struct compBlk* tBUF = NULL;
 	struct compBlk* fBUF = NULL;
@@ -51,7 +63,7 @@ size_t PageCompression(file_t *file, descriptor_t *descriptor, const void *buf, 
 	/*
 	* The size after compression is tricky for the final page.(c'z that the final page is < 4096)
 	*/
-	size_t cSize = 0; // the size after compression.
+	//size_t cSize = 0; // the size after compression.
 	int pageUsed =0;
 	
 	//initialization of buffer memory
@@ -162,46 +174,59 @@ int doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Offse
 	return fCnt;
 }
 
+int readCompInfo(file_t *file, descriptor_t *descriptor)
+{
+	return FAIL;
+}
 /*
 * Decompression should be easier: just load them one by one into buf.
+// Read out size Bytes from offSetInFile, and decompressed to buf.
 * The compression flags are stored inside the file metadata.
 * Step1: read out the compressed data.(calculate the physical offset)
-* Step2: decompress
+* Step2: decompress to buf.
 */
-//n
-int PageDecompression(file_t *file, descriptor_t *descriptor, void *buffer, size_t size, off_t offset)
+
+int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf, size_t size, off_t offsetInFile)
 {
+	//OffsetInfile is offset in uncompressed domain: calculate the offset in compressed domain.
+	readCompInfo(file, descriptor);
+	
+	//Read original compressed data into inbuf
+	
+	//do decompression one by one and compose output.
+	
+	
 	int count = size / PAGE_SIZE;
 	int index = 0;
 	
-	Bytef decBuf[PAGE_SIZE * 2] = { 0 };
+	Bytef decBuf[DOUBLE_PAGE] = { 0 };
 	uLong decLen1 = PAGE_SIZE;
 	uLong decLen2 = PAGE_SIZE;
 	
 	//Store the compression information: offset and flag.
-	uLong * offset = descriptor->cOffsets ;
-	int * FLAG = descriptor->cFlags;
+	ushort * offset = descriptor->cOffsets ;
+	uchar * FLAG = descriptor->cFlags;
 	//int SEG = descriptor->cPage;
 	
-	int ret1 = -99, ret2 = -99;
+	int ret1 = IMPOS_VAL, ret2 = IMPOS_VAL;
 	int nchar = 0;
 	int total = 0;
 	
 	while(index < count){
-		memset(decBuf, 0, PAGE_SIZE * 2);
+		memset(decBuf, 0, DOUBLE_PAGE);
 		//Need to find a way to continue decompressing for two sectors.
 		uLong inLen = PAGE_SIZE;
-		if(FLAG[index] == 1){
-			ret1 = uncompress(decBuf, &decLen1, buf+PAGE_SIZE*index, inLen);
+		if(FLAG[index] == COMPRESSED){
+			ret1 = uncompress(decBuf, &decLen1, inbuf + PAGE_SIZE*index, inLen);
 			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
-							  buf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
+							  inbuf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
 			DEBUG_("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
 		}else{
 			//no compression
 			ret1 = Z_OK; ret2 = Z_OK;
 			decLen1 = PAGE_SIZE; 
 			decLen2 = 0;
-			memcpy(decBuf, buf + PAGE_SIZE*index, PAGE_SIZE);
+			memcpy(decBuf, inbuf + PAGE_SIZE*index, PAGE_SIZE);
 		}
 
 		if(ret1 == Z_OK && ret2 == Z_OK){
@@ -218,73 +243,11 @@ int PageDecompression(file_t *file, descriptor_t *descriptor, void *buffer, size
 	return total;
 }
 
-
-
-//| ! | o b s o l e t e |  code
-int doPageCompression(file_t *file, descriptor_t *descriptor, const void *buf, size_t size, off_t offset)
+//Step2.
+int doPageLevelDecompression(void *outbuf, void* inbuf,  uchar* Flags, ushort* Offsets, size_t size)
 {
-	//offset maybe not integer times of PAGE_SIZE, in this case. ignore first, only sequential write.
-	int fd = descriptor->fd;
-	int count =  size / PAGE_SIZE; //index: 0->count
-	int index = 0;
-	int nchar = 0;
-	//Create count CompBlocks, do we need initialize here?
-	struct compBlk* cBlk;
-	cBlk = (struct compBlk*) malloc((1+count)*sizeof(struct compBlk));
-	for(index = 0; index <= count; index++){
-		//Initialize cBlk
-		memset(cBlk[index].dst, 0, PAGE_SIZE);
-		cBlk[index].dst_len =  2*PAGE_SIZE;
-		//From (buf + index*PAGE_SIZE)
-		struct compBlk* curBlk = cBlk + index;
-		uLong blkSize = (index < count)? PAGE_SIZE : size % PAGE_SIZE;
-
-		int ret = compress(curBlk->dst, &curBlk->dst_len, 
-						   (Bytef*) (buf + index*PAGE_SIZE), (uLong) blkSize);
-		if(curBlk->dst_len <= PAGE_SIZE) 
-			curBlk->flag = 1;
-		else
-			curBlk->flag = 0;
-		DEBUG_("Ret is %d. dst_len is %ld.", ret, curBlk->dst_len);
-		if(Z_OK != ret ){
-			DEBUG_("%d block Error.\n",index);
-			return FAIL;
-		}else{
-			DEBUG_("%2d Block: %ld becomes %ld bytes.\n",
-				   index, blkSize, curBlk->dst_len);
-		}
-	}
-	//The compressed data are stored in cBlk[0:count] now.
-	//Reorgranise and write to file.
-	int cur = 0;
-	while(cur < count){
-		memset(DATA_BUFFER, 0, PAGE_SIZE);
-		//assert(cur < count);
-		if(cBlk[cur].dst_len + cBlk[cur+1].dst_len <= PAGE_SIZE){
-			memcpy(DATA_BUFFER, cBlk[cur].dst, cBlk[cur].dst_len);
-			memcpy(DATA_BUFFER + cBlk[cur].dst_len, cBlk[cur+1].dst, cBlk[cur+1].dst_len);
-			//padding.
-			memset(DATA_BUFFER + cBlk[cur].dst_len + cBlk[cur+1].dst_len, 0, (PAGE_SIZE - cBlk[cur].dst_len - cBlk[cur+1].dst_len));
-			cur = cur + 2;
-		}else{
-			//uncompressed
-			memcpy(DATA_BUFFER, buf+cur*PAGE_SIZE, PAGE_SIZE);
-			cur++;
-		}		
-		nchar = write(fd, DATA_BUFFER, PAGE_SIZE);
-		DEBUG_("Write %d Bytes.Now cur = %d.\n", nchar, cur);
-	}
-	if(cur == count){
-		memcpy(DATA_BUFFER, buf+cur*PAGE_SIZE, PAGE_SIZE);
-		nchar = write(fd, DATA_BUFFER, PAGE_SIZE);
-		DEBUG_("Write %d Bytes. Now cur = %d.\n", nchar, cur);
-	}
-	if(cur > count){
-		DEBUG_("cur > count now. Do nothing.\n");
-	}
-	return nchar;
+	
 }
-
 
 
 

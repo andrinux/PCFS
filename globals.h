@@ -34,7 +34,6 @@ extern char *mmapped_dirs[];
 
 extern database_t database;
 extern database_t comp_database;
-extern dedup_hash_t dedup_database;
 
 void *thread_compress(void *arg);
 

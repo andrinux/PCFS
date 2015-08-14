@@ -7,12 +7,19 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <zlib.h>
-
 #include "list.h"
+
+#ifndef PAGE_SIZE
+#define PAGE_SIZE (4096)
+#endif
+
+typedef unsigned char uchar;
+typedef unsigned short ushort;
 
 #define FALSE 0
 #define TRUE 1
 #define FAIL -1
+
 
 #ifdef DEBUG
 #include <assert.h>
@@ -39,12 +46,8 @@
 # define NEED_RD_LOCK(lock)
 #endif
 
-#ifndef PAGE_SIZE
-#define PAGE_SIZE (4096)
-#endif
 
-typedef unsigned char uchar;
-typedef unsigned short ushort;
+
 
 
 
@@ -77,8 +80,9 @@ typedef struct
 	char id[3];		// ID of FuseCompress format
 	unsigned char type;	// ID of used compression module
 	off_t size;		// Uncompressed size of the file in bytes
-	unsigned char *cFlags;
-	short *offsets; //Debug purpose, offset of 1st compressed blk
+	off_t pageUsed; //XZ: how many page used- related to the size of cFlags and cOffsets 
+	uchar *cFlags;
+	ushort *cOffsets; //Debug purpose, offset of 1st compressed blk
 } __attribute__((packed)) header_t;
 
 #define READ		(1 << 1)
@@ -86,6 +90,7 @@ typedef struct
 
 #define COMPRESSING	(1 << 1)
 #define DECOMPRESSING	(1 << 2)
+
 #define CANCEL		(1 << 3)
 #define DEDUPING	(1 << 4)
 
@@ -179,17 +184,5 @@ typedef struct {
 #define DATABASE_HASH_MASK 0xffff
 #define DATABASE_HASH_QUEUE_T uint16_t
 
-/** Deduplication hash table.
- * Files are hashed by their MD5 sum and their PCFS filename hash,
- * allowing fast lookup by both content (for deduplication) and name (for 
- * deduplicated file modification).
- */
-typedef struct {
-	pthread_mutex_t lock;
-	pthread_cond_t cond;
-	int entries; 			/**< Number of entries in the database */
-	struct list_head head_filename[DATABASE_HASH_SIZE]; /**< Heads of the filename hash lists. */
-	struct list_head head_md5[DATABASE_HASH_SIZE]; /**< Heads of the MD5 hash lists. */
-} dedup_hash_t;
 
 #endif
