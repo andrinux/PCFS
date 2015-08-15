@@ -52,6 +52,13 @@ compressor_t *file_compressor(const header_t *fh)
 	return compressor;
 }
 
+//write the extended header into file
+int file_write_ExtHeader(off_t size, descriptor_t *descriptor)
+{
+	return FAIL;
+}
+
+
 int file_write_header(int fd, compressor_t *compressor, off_t size)
 {
 	header_t fh;

@@ -103,6 +103,7 @@ size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *
 	descriptor->cFlags = Flags;
 	descriptor->cOffsets=Offsets;
 	
+	
 	//Write file data into disk
 	file_write_header(descriptor->fd,
 						file->compressor,
@@ -128,7 +129,7 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 	size_t cSize = 0;
 	struct compBlk* curBlk;
 	
-	int count = size/PAGE_SIZE + (size%PAGE_SIZE == 0) ? 0 : 1; // in total count pages.
+	int count = size/PAGE_SIZE + (size % PAGE_SIZE == 0) ? 0 : 1; // in total count pages: 0->count-1
 	cSize = 0;
 	
 	for(index = 0; index < count; index++){
@@ -183,6 +184,7 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 			//padding.
 			memset(curBlk->dst + tBUF[cur].dst_len + tBUF[cur+1].dst_len, 0, 
 				   (PAGE_SIZE - tBUF[cur].dst_len - tBUF[cur+1].dst_len));
+			
 			//iteration.
 			cur = cur + 2;
 			Flags[fCnt] = COMPRESSED;
@@ -201,18 +203,24 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 	}
 	//the final page. could be compressed or not.
 	//copy directly.
-	if(cur = count-1){
+	if(cur == count-1){
 		curBlk = fBUF + fCnt;
 		memcpy(curBlk->dst, tBUF[cur].dst, tBUF[cur].dst_len);
-		Flags[fCnt] = tBUF[cur]->flag;
-		Offsets[fCnt] = tBUF[cur]->dst_len;
+		Flags[fCnt] = tBUF[cur].flag;
+		Offsets[fCnt] = tBUF[cur].dst_len;
 		fCnt++;
-		cSize+= tBUF[cur]->dst_len;
+		cSize+= tBUF[cur].dst_len;
 	}
 	
 	//Reorganising finished.
 	return cSize;
 }
+
+int writeCompInfo(file_t *file, descriptor_t *descriptor, uchar* cFlags, ushort* cOffsets)
+{
+	return FAIL;
+}
+
 
 int readCompInfo(file_t *file, descriptor_t *descriptor, uchar* cFlags, ushort* cOffsets)
 {
@@ -238,7 +246,6 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	
 	//ushort * offset = descriptor->cOffsets ;
 	//uchar * FLAG = descriptor->cFlags;
-	int uSize = file->size; //size in uncompressed domain.
 	int cSize = descriptor->cSize;
 	int count = cSize /PAGE_SIZE;
 	Bytef* inbuf = (Bytef*) malloc (cSize * sizeof(Bytef));
