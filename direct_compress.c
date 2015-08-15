@@ -61,6 +61,7 @@ size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *
 	* pageUsed can be calculated by cSize:
 	* pU = cSize/PAGE_SIZE + (cSize%PAGE_SIZE != 0)?1:0;
 	*/
+	size_t rData =0; //bytes of real data
 	size_t cSize = 0; // the size after compression.
 	
 	int pageUsed =0;
@@ -107,12 +108,28 @@ size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *
 	//Write file data into disk- header.
 	file_write_ExtHeader(file, descriptor);	
 	//write Flags and Offsets
-	
+	int fd = descriptor->fd;
+	int ret =0;
+	ret = write(fd, Flags, pageUsed*sizeof(uchar));
+	DEBUG_("write %d Flags into fd %d\n", ret, fd);
+	ret = write(fd, Offsets, pageUsed*sizeof(ushort));
+	DEBUG_("write %d Offsets into fd %d\n", ret, fd);
 	//After write to file, need to free the mrmory allocated to buffer.
+	int index = 0;
 	
+	for(index =0; index < pageUsed; index++){
+		ret = write(fd, fBUF[index].dst, fBUF[index].dst_len);
+		DEBUG_("write %d bytes into fd %d\n", ret, fd);
+		rData += ret;
+	}
+	
+	free(tBUF);
+	free(fBUF);
+	free(Flags);
+	free(Offsets);
 	
 	//return values
-	return pageUsed;
+	return rData;
 }
 
 // Do Page level compression and store the results in these four buffers.
