@@ -53,9 +53,40 @@ compressor_t *file_compressor(const header_t *fh)
 }
 
 //write the extended header into file
-int file_write_ExtHeader(off_t size, descriptor_t *descriptor)
+int file_write_ExtHeader(file_t *file, descriptor_t *descriptor)
 {
-	return FAIL;
+	extheader_t fh;
+	int fd= descriptor->fd;
+	int ret1 = -1, ret2 = -1, ret3 = -1;
+	assert(fd >= 0);
+	assert(file->compressor);
+	assert(file->size != (off_t) -1);
+	
+	int pageUsed = descriptor->cPage;
+	fh.id[0] = '\037';
+	fh.id[1] = '\135';
+	fh.id[2] = '\211';
+	fh.type = file->compressor->type;
+	fh.size = to_le64(file->size);
+	fh.pageUsed = descriptor->cPage;
+	fh.cSize = descriptor->cSize;
+	//write Flags and Offsets
+	DEBUG_("writing ext header to %d at %zd\n", fd, lseek(descriptor->fd, 0, SEEK_SET));
+	ret1 = write(fd, &fh, sizeof(fh));
+	if(ret1 !=sizeof(fh)) 	
+		DEBUG_("Error in writing ext header.\n");
+	
+	//DEBUG_("writing ext header: flags to %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR);
+	ret2 = write(fd, descriptor->cFlags, sizeof(uchar) * pageUsed);
+	if(ret2 != sizeof(uchar)* pageUsed) 	
+		DEBUG_("Error in writing ext header part 2.\n");
+	
+	//DEBUG_("writing ext header: Offsets to %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR);
+	ret3 = write(fd, descriptor->cOffsets, sizeof(ushort)* pageUsed);
+	if(ret3 != sizeof(ushort)* pageUsed) 	
+		DEBUG_("Error in writing ext header part 3.\n");
+	
+	return ret1+ret2+ret3;
 }
 
 
@@ -261,6 +292,19 @@ inline void file_close(int *fd)
 	*fd = -1;
 }
 
+int is_excluded(const char *filename)
+{
+	char **dir;
+	if (user_exclude_paths) {
+		for (dir = user_exclude_paths; *dir != NULL; dir++) {
+			if (strncmp(filename, *dir, strlen(*dir)) == 0)
+				return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
 int is_compressible(const char *filename)
 {
         char **ext;
@@ -271,17 +315,4 @@ int is_compressible(const char *filename)
                 for (ext = user_incompressible; *ext != NULL; ext++)
                         if (strcasestr(filename, *ext))
                                 return FALSE;
-        return TRUE;
-}
-
-int is_excluded(const char *filename)
-{
-  char **dir;
-  if (user_exclude_paths) {
-    for (dir = user_exclude_paths; *dir != NULL; dir++) {
-      if (strncmp(filename, *dir, strlen(*dir)) == 0)
-        return TRUE;
-    }
-  }
-  return FALSE;
-}
+				return TRUE;}

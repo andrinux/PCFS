@@ -102,14 +102,11 @@ size_t PageLevelCompression(file_t *file, descriptor_t *descriptor, const void *
 	descriptor->cPage = pageUsed;
 	descriptor->cFlags = Flags;
 	descriptor->cOffsets=Offsets;
+	descriptor->cSize = cSize;
 	
-	
-	//Write file data into disk
-	file_write_header(descriptor->fd,
-						file->compressor,
-						file->size);
-	//Write offset and flags
-	
+	//Write file data into disk- header.
+	file_write_ExtHeader(file, descriptor);	
+	//write Flags and Offsets
 	
 	//After write to file, need to free the mrmory allocated to buffer.
 	

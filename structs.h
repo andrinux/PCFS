@@ -81,9 +81,16 @@ typedef struct
 	char id[3];		// ID of FuseCompress format
 	unsigned char type;	// ID of used compression module
 	off_t size;		// Uncompressed size of the file in bytes
+} __attribute__((packed)) header_t;
+
+typedef struct
+{
+	char id[3];		// ID of FuseCompress format
+	unsigned char type;	// ID of used compression module
+	off_t size;		// Uncompressed size of the file in bytes
 	off_t pageUsed; //XZ: how many page used- related to the size of cFlags and cOffsets
 	off_t cSize;	//XZ: size in compressed domain.
-} __attribute__((packed)) header_t;
+} __attribute__((packed)) extheader_t;
 
 #define READ		(1 << 1)
 #define WRITE		(1 << 2)
