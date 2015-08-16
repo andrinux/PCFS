@@ -682,6 +682,7 @@ static int PCFS_read(const char *path, char *buf, size_t size, off_t offset, str
 	if (file->compressor)
 	{
 		res = direct_decompress(file, descriptor, buf, size, offset);
+		//res = PageLevelDecompression(file, descriptor, buf, size, offset);
 		UNLOCK(&file->lock);
 	}
 	else
@@ -749,6 +750,7 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 		//XZ: The header(including flags and offsets) is generated after
 		//		compression, so we need to do compression first. 
 		res = direct_compress(file, descriptor, buf, size, offset);
+		//res= PageLevelCompression(file, descriptor, buf, size, offset);
 	}
 	else
 	{

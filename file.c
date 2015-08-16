@@ -19,8 +19,8 @@
 #include "structs.h"
 #include "file.h"
 #include "utils.h"
-
 compressor_t *find_compressor(const header_t *fh)
+//compressor_t *find_compressor(const extheader_t *fh)
 {
 	if (fh->type > sizeof(compressors) / sizeof(compressors[0]))
 		return NULL;
@@ -37,8 +37,8 @@ compressor_t *find_compressor_name(const char *name)
 			return compressors[i];
 	return NULL;
 }
-
 compressor_t *file_compressor(const header_t *fh)
+//compressor_t *file_compressor(const extheader_t *fh)
 {
 	compressor_t *compressor;
 
@@ -113,7 +113,7 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
     return ret;
 }
 
-int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t *pageUsed, off_t *cSize)
+int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, int *pageUsed, int *cSize)
 {
 	int           ret;
 	extheader_t      fh;
@@ -135,7 +135,7 @@ int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t
 			*size       = fh.size;
 		*pageUsed = fh.pageUsed;
 		*cSize = fh.cSize;
-		DEBUG_("Read from header: size %ld, pageUsed %ld, cSize %ld", 
+		DEBUG_("Read from header: size %ld, pageUsed %d, cSize %d", 
 										*size, *pageUsed, *cSize);
 	}
 	return 0;
