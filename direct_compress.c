@@ -257,11 +257,23 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	//OffsetInfile is offset in uncompressed domain: calculate the offset in compressed domain.
 	//the memory must be allocated inside the main function.
 	int fd = descriptor->fd;
-	
+	file_read_ExtHeader_fd(fd, &descriptor->compressor, &descriptor->size, 
+						   &descriptor->pageUsed, &descriptor->cSize)
 	//Store the compression information: offset and flag.
+	int cPage =descriptor->pageUsed;
+	int size = descriptor->size;
+	//outbuf should be allocated already?
 	
-	//ushort * offset = descriptor->cOffsets ;
-	//uchar * FLAG = descriptor->cFlags;
+	offset =  (ushort*) malloc(sizeof(ushort) * cPage);
+	FLAG = (uchar*) malloc(sizeof(uchar) * cPage);
+	descriptor->cOffsets = offset;
+	descriptor->cFlags = FLAG;
+	
+	if(read(fd, offset, sizeof(ushort)*cPage) != (sizeof(ushort)*cPage))
+		DEBUG_("Read offset header error.\n");
+	if(read(fd, FLAG, sizeof(uchar)*cPage) != (sizeof(uchar)*cPage))
+		DEBUG_("Read FLAG header error.\n");
+	
 	int cSize = descriptor->cSize;
 	int count = cSize /PAGE_SIZE;
 	Bytef* inbuf = (Bytef*) malloc (cSize * sizeof(Bytef));
@@ -312,11 +324,6 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	return total;
 }
 
-//Step2.
-int doPageLevelDecompression(void *outbuf, void* inbuf,  uchar* Flags, ushort* Offsets, size_t size)
-{
-	return FAIL;
-}
 
 
 

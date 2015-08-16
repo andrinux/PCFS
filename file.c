@@ -113,7 +113,7 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
     return ret;
 }
 
-int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t *)
+int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t *pageUsed, off_t *cSize)
 {
 	int           ret;
 	header_t      fh;
@@ -127,16 +127,18 @@ int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t
 	if (r == FAIL)
 		return r;
 
-	if (r == sizeof(fh))
+	if (ret == sizeof(fh))
 	{
 		fh.size = from_le64(fh.size);
 		*compressor = file_compressor(&fh);
 		if (*compressor)
 			*size       = fh.size;
+		*pageUsed = fh.pageUsed;
+		*cSize = fh.cSize;
+		DEBUG_("Read from header: size %ld, pageUsed %ld, cSize %ld", 
+										*size, *pageUsed, *cSize);
 	}
 	return 0;
-	
-	return ret;
 }
 
 
