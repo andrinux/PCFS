@@ -1552,6 +1552,8 @@ if [ "x$config" = "x" ] ; then
     $VERBOSE_ECHO "Could not locate the configure template (from `pwd`)"
 fi
 
+rm -rf ./autom4te.cache/
+
 # summarize
 $ECHO "done"
 $ECHO
