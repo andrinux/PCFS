@@ -255,7 +255,9 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	ushort * offset = NULL;
 	uchar * FLAG = NULL;
 	//OffsetInfile is offset in uncompressed domain: calculate the offset in compressed domain.
-	readCompInfo(file, descriptor, FLAG, offset);
+	//the memory must be allocated inside the main function.
+	int fd = descriptor->fd;
+	
 	//Store the compression information: offset and flag.
 	
 	//ushort * offset = descriptor->cOffsets ;

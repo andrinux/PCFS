@@ -113,6 +113,34 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
     return ret;
 }
 
+int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t *)
+{
+	int           ret;
+	header_t      fh;
+
+	assert(fd >= 0);
+	assert(compressor);
+	assert(size);
+
+	DEBUG_("reading header from %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
+	r = read(fd, &fh, sizeof(fh));
+	if (r == FAIL)
+		return r;
+
+	if (r == sizeof(fh))
+	{
+		fh.size = from_le64(fh.size);
+		*compressor = file_compressor(&fh);
+		if (*compressor)
+			*size       = fh.size;
+	}
+	return 0;
+	
+	return ret;
+}
+
+
+
 /**
  * Returns type of compression and real size of the file if file is compressed.
  * If the header is invalid, the size will not be touched, and the compressor
@@ -148,6 +176,8 @@ int file_read_header_fd(int fd, compressor_t **compressor, off_t *size)
 	}
 	return 0;
 }
+
+
 
 /**
  * Try to acquire compressor type and uncompressed file size from header.
