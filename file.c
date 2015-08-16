@@ -116,16 +116,16 @@ int file_write_header(int fd, compressor_t *compressor, off_t size)
 int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, off_t *pageUsed, off_t *cSize)
 {
 	int           ret;
-	header_t      fh;
+	extheader_t      fh;
 
 	assert(fd >= 0);
 	assert(compressor);
 	assert(size);
 
 	DEBUG_("reading header from %d at %zd\n", fd, lseek(fd, 0, SEEK_CUR));
-	r = read(fd, &fh, sizeof(fh));
-	if (r == FAIL)
-		return r;
+	ret = read(fd, &fh, sizeof(fh));
+	if (ret == FAIL)
+		return ret;
 
 	if (ret == sizeof(fh))
 	{

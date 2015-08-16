@@ -254,16 +254,19 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 {
 	ushort * offset = NULL;
 	uchar * FLAG = NULL;
+	
 	//OffsetInfile is offset in uncompressed domain: calculate the offset in compressed domain.
 	//the memory must be allocated inside the main function.
 	int fd = descriptor->fd;
-	file_read_ExtHeader_fd(fd, &descriptor->compressor, &descriptor->size, 
-						   &descriptor->pageUsed, &descriptor->cSize)
+	file_read_ExtHeader_fd(fd, &file->compressor, &file->size, 
+						   &descriptor->cPage, &descriptor->cSize);
+	
 	//Store the compression information: offset and flag.
-	int cPage =descriptor->pageUsed;
-	int size = descriptor->size;
+	int cPage =descriptor->cPage;
+	//int size = descriptor->size;
 	//outbuf should be allocated already?
 	
+	//read offset and FLAG
 	offset =  (ushort*) malloc(sizeof(ushort) * cPage);
 	FLAG = (uchar*) malloc(sizeof(uchar) * cPage);
 	descriptor->cOffsets = offset;
@@ -276,10 +279,11 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	
 	int cSize = descriptor->cSize;
 	int count = cSize /PAGE_SIZE;
-	Bytef* inbuf = (Bytef*) malloc (cSize * sizeof(Bytef));
+	//Bytef* inbuf = (Bytef*) malloc (cSize * sizeof(Bytef));
+	Bytef* inbuf = (Bytef*) malloc (cPage * PAGE_SIZE);
 	//Read original compressed data into inbuf
 	if(cSize != read(descriptor->fd, inbuf, cSize)){
-		DEBUG_("compressed data read error.\n");
+		DEBUG_("Read compressed data error.\n");
 		return FAIL;
 	}
 	//do decompression one by one and compose output.
@@ -293,12 +297,13 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 	int nchar = 0;
 	int total = 0;
 	
-	while(index < count){
+	while(index < count-1){
 		memset(decBuf, 0, DOUBLE_PAGE);
 		//Need to find a way to continue decompressing for two sectors.
 		uLong inLen = PAGE_SIZE;
+		
 		if(FLAG[index] == COMPRESSED){
-			ret1 = uncompress(decBuf, &decLen1, inbuf + PAGE_SIZE*index, inLen);
+			ret1 = uncompress(decBuf, &decLen1, inbuf + PAGE_SIZE*index, inLen);				
 			ret2 = uncompress(decBuf+PAGE_SIZE, &decLen2, 
 							  inbuf+PAGE_SIZE*index+offset[index], inLen-offset[index]);
 			DEBUG_("Index = %d: dec1Len=%ld. dec2Len=%ld.\n", index, decLen1, decLen2);
@@ -309,7 +314,13 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 			decLen2 = 0;
 			memcpy(decBuf, inbuf + PAGE_SIZE*index, PAGE_SIZE);
 		}
-
+		
+		if(index == count-1){
+			//the last one, could be shorter than PAGE_SIZE.
+			//
+			
+		}
+		
 		if(ret1 == Z_OK && ret2 == Z_OK){
 			//nchar = write(fd, decBuf, decLen1 + decLen2);
 			
