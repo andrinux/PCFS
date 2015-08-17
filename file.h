@@ -7,8 +7,8 @@ compressor_t *find_compressor(const header_t *fh);
 compressor_t *find_compressor_name(const char *name);
 compressor_t *file_compressor(const header_t *fh);
 
-//compressor_t *find_compressor(const extheader_t *fh);
-//compressor_t *file_compressor(const extheader_t *fh);
+compressor_t *file_compressorExt(const extheader_t *fh);
+compressor_t *find_compressorExt(const extheader_t *fh);
 
 int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, int *pageUsed, int *cSize);
 int file_write_ExtHeader(file_t *file, descriptor_t *descriptor);

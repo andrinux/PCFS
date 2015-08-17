@@ -28,6 +28,16 @@ compressor_t *find_compressor(const header_t *fh)
 	return compressors[fh->type];
 }
 
+compressor_t *find_compressorExt(const extheader_t *fh)
+//compressor_t *find_compressor(const extheader_t *fh)
+{
+	if (fh->type > sizeof(compressors) / sizeof(compressors[0]))
+		return NULL;
+
+	return compressors[fh->type];
+}
+
+
 compressor_t *find_compressor_name(const char *name)
 {
 	int i;
@@ -51,6 +61,23 @@ compressor_t *file_compressor(const header_t *fh)
 
 	return compressor;
 }
+
+
+compressor_t *file_compressorExt(const extheader_t *fh)
+{
+	compressor_t *compressor;
+
+	if ((fh->id[0] != '\037') || (fh->id[1] != '\135') || (fh->id[2] != '\211'))
+		return NULL;
+	
+	compressor = find_compressorExt(fh);
+	if (!compressor)
+		return NULL;
+
+	return compressor;
+}
+
+
 
 //write the extended header into file
 int file_write_ExtHeader(file_t *file, descriptor_t *descriptor)
@@ -130,7 +157,7 @@ int file_read_ExtHeader_fd(int fd, compressor_t **compressor, off_t *size, int *
 	if (ret == sizeof(fh))
 	{
 		fh.size = from_le64(fh.size);
-		*compressor = file_compressor(&fh);
+		*compressor = file_compressorExt(&fh);
 		if (*compressor)
 			*size       = fh.size;
 		*pageUsed = fh.pageUsed;

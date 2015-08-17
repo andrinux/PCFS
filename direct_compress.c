@@ -858,6 +858,8 @@ int direct_decompress(file_t *file, descriptor_t *descriptor, void *buffer, size
 		size = file->size - descriptor->offset;
 	
 	len = file->compressor->read(descriptor->handle, buffer, size);
+	DEBUG_("XZ: Here to run PageLevelDecompression.\n");
+	//len = PageLevelDecompression(file, descriptor, buffer, size, 0);
 	if (len < 0)
 	{
 		FILEERR_(file, "failed to read from compressor (file %s)", file->filename);
@@ -997,6 +999,7 @@ int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, 
 	// XZ: Note the 'handle', what is used for? assigned in above, gzdopen return a handle.
 	//gdb to see the content of handle
 	len = file->compressor->write(descriptor->handle, (void *)buffer, size);
+	//len = PageLevelCompression(file, descriptor, (void *)buffer, size, 0);
 	
 	DEBUG_("write requested: %zd, really written: %d", size, len);
 
@@ -1023,7 +1026,7 @@ int direct_compress(file_t *file, descriptor_t *descriptor, const void *buffer, 
 	}
 	// Todo, we can speed this up by only writing the size, and not flushing
 	// it so often.
-	//
+	// XZ: why write the header at the end? Weird.
 	ret = file_write_header(descriptor->fd,
 				file->compressor,
 				file->size);
