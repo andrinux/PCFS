@@ -564,7 +564,7 @@ static int PCFS_open(const char *path, struct fuse_file_info *fi)
 		//exit(EXIT_FAILURE);
 		return -ENOMEM;
 	}
-
+	//XZ: what is direct_open used for?
 	file = direct_open(full, TRUE);
 
 	// if user wants to open file in O_WRONLY, we must open file for reading too

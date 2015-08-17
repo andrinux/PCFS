@@ -23,7 +23,7 @@ TO Do some really interesting things which has some impact...
 ~~~~~
 $ ./autogen.sh
 $ ./configure
-$ ./make
+$ make
 $ ./PCFS ~/testDir
 example:
 $ mount

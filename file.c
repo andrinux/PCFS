@@ -300,6 +300,7 @@ char *file_create_temp(int *fd_temp)
  * @return 
  */
 #define ALLMODES S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH
+
 int file_open(const char *filename, int mode)
 {
 	int         fd;
