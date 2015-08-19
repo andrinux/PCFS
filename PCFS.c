@@ -554,7 +554,7 @@ static int PCFS_open(const char *path, struct fuse_file_info *fi)
 	
 	full = PCFS_getpath(path);
 
-	DEBUG_("('%s')", full);
+	DEBUG_("XZ: the full path is: ('%s')", full);
 	STAT_(STAT_OPEN);
 
 	descriptor = (descriptor_t *) malloc(sizeof(descriptor_t));

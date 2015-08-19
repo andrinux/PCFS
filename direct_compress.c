@@ -1126,3 +1126,14 @@ file_t* direct_rename(file_t *file_from, file_t *file_to)
 	return file_to;
 }
 
+//check the usage of compression/decompression: Use of PageLevelCompression Function.
+void testCompress(const char* srcPath, const char* dstPath)
+{
+	
+}
+
+
+void testDeCompress(const char* srcPath, const char* dstPath)
+{
+	
+}
