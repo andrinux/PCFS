@@ -40,10 +40,9 @@ $ du -h ~/testDir/Trace.log
 * More on the way... :)
 
 ##Technology
-It is pretty hard to debug a kernel space file system. 
-So I decide to try a userspace one first and migrate it to kernel version.
+I decide to try a userspace one first and migrate it to kernel version.
 Actually, migrating to Kernel is always necessary.
-
+Another project TC-Ext2 is for kernel version.
 
 ##How did I do
 * Add extra information on the metadata of data blocks
