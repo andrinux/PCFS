@@ -1137,3 +1137,13 @@ void testDeCompress(const char* srcPath, const char* dstPath)
 {
 	
 }
+
+
+int new_main()
+{
+	const char * srcPath = "/home/xuebinzhang/Trace.log";
+	const char * dstPath = "/home/xuebinzhang/zTrace.log";
+	testCompress(srcPath);
+	testDecompress(dstPath);
+	return 0;
+}
