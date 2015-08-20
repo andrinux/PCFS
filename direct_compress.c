@@ -19,6 +19,18 @@
 #include "background_compress.h"
 #include "utils.h"
 
+#include <time.h>
+#include <zlib.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h> // open function
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <assert.h>
+
+
+
 #ifndef PAGE_SIZE
 #define PAGE_SIZE (4096)
 #endif
@@ -1129,7 +1141,32 @@ file_t* direct_rename(file_t *file_from, file_t *file_to)
 //check the usage of compression/decompression: Use of PageLevelCompression Function.
 void testCompress(const char* srcPath, const char* dstPath)
 {
-	
+	DEBUG_("Entering testCompress. src= %s, dst=%s\n", srcPath, dstPath);
+	int fin = open(srcPath, O_RDONLY);
+	if(fin){
+		puts("Open OK.");
+	}else{
+		puts("Cannot Open input file");
+	}
+	mode_t mode = 0666;
+	int fout = open(dstPath, O_CREAT|O_WRONLY, mode);
+	if(fout)
+		puts("Output file OK.");
+	else
+		puts("Cannot create Output file.");
+    
+    //Read Data into buf And Call write4K
+    //File openning finished
+	lseek(fin, 0, SEEK_SET);
+	int nchar = 0;
+	Bytef *buf;
+	uLong fsize = getFileSize(srcPath);
+	buf = (Bytef *) malloc(fsize * sizeof(Bytef));
+	nchar = read(fin, buf, fsize);
+	if(nchar != fsize){
+		printf("Error occured in Reading to buf...\n");
+		return;
+	}
 }
 
 
@@ -1143,7 +1180,8 @@ int new_main()
 {
 	const char * srcPath = "/home/xuebinzhang/Trace.log";
 	const char * dstPath = "/home/xuebinzhang/zTrace.log";
-	testCompress(srcPath);
-	testDecompress(dstPath);
+	const char * newPath = "/home/xuebinzhang/newTrace.log";
+	testCompress(srcPath, dstPath);
+	testDecompress(dstPath, newPath);
 	return 0;
 }
