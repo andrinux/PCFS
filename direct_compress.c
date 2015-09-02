@@ -1142,6 +1142,7 @@ file_t* direct_rename(file_t *file_from, file_t *file_to)
 void testCompress(const char* srcPath, const char* dstPath)
 {
 	DEBUG_("Entering testCompress. src= %s, dst=%s\n", srcPath, dstPath);
+	
 	int fin = open(srcPath, O_RDONLY);
 	if(fin){
 		puts("Open OK.");
@@ -1160,28 +1161,21 @@ void testCompress(const char* srcPath, const char* dstPath)
 	lseek(fin, 0, SEEK_SET);
 	int nchar = 0;
 	Bytef *buf;
-	uLong fsize = getFileSize(srcPath);
+	uLong fsize = PCFS_getFileSize(srcPath);
 	buf = (Bytef *) malloc(fsize * sizeof(Bytef));
 	nchar = read(fin, buf, fsize);
 	if(nchar != fsize){
 		printf("Error occured in Reading to buf...\n");
 		return;
 	}
+	//create struct: file and descriptor
+	
 }
 
 
-void testDeCompress(const char* srcPath, const char* dstPath)
+void testDecompress(const char* srcPath, const char* dstPath)
 {
 	
 }
 
 
-int new_main()
-{
-	const char * srcPath = "/home/xuebinzhang/Trace.log";
-	const char * dstPath = "/home/xuebinzhang/zTrace.log";
-	const char * newPath = "/home/xuebinzhang/newTrace.log";
-	testCompress(srcPath, dstPath);
-	testDecompress(dstPath, newPath);
-	return 0;
-}

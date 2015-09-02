@@ -49,6 +49,7 @@
 #include "direct_compress.h"
 #include "background_compress.h"
 
+
 static char DOT = '.';
 static int cmpdirFd;	// Open fd to cmpdir for fchdir.
 
@@ -1108,6 +1109,7 @@ static int set_sigterm_handler(void)
 char compresslevel[3] = "wbx";
 
 #define MAX_OPTS 50
+#if 0
 int main(int argc, char *argv[])
 {
 	int               fusec = 0;
@@ -1461,3 +1463,21 @@ trysomethingelse:
 	
 	return ret;
 }
+
+#endif
+
+int main()
+{
+	const char * srcPath = "/home/xuebinzhang/Trace.log";
+	const char * dstPath = "/home/xuebinzhang/zTrace.log";
+	const char * newPath = "/home/xuebinzhang/newTrace.log";
+	testCompress(srcPath, dstPath);
+	testDecompress(dstPath, newPath);
+	return 0;
+}
+
+
+
+
+
+

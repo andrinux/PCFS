@@ -31,4 +31,8 @@ file_t *direct_rename(file_t *file_from, file_t *file_to);
 
 void flush_file_cache(file_t* file);
 
+
+
+void testCompress(const char* srcPath, const char* dstPath);
+void testDecompress(const char* srcPath, const char* dstPath);
 #endif
