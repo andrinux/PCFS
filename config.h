@@ -4,8 +4,6 @@
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
-/* Compiling on Mac OS X */
-/* #undef CONFIG_OSX */
 
 /* big-endian */
 /* #undef FC_BIG_ENDIAN */
