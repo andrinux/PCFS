@@ -1173,9 +1173,3 @@ void testCompress(const char* srcPath, const char* dstPath)
 }
 
 
-void testDecompress(const char* srcPath, const char* dstPath)
-{
-	
-}
-
-
