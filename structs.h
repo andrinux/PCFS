@@ -75,6 +75,7 @@ typedef struct
 
 } compressor_t;
 
+// Note the ExtHeaders and Ordinary Headers.
 //The data written as the header. following by cFlags. cOffsets.
 typedef struct
 {
