@@ -32,6 +32,12 @@ $ du -h ~/Trace.log
 $ du -h ~/testDir/Trace.log
 ~~~~~
 
+## Migrate to Android
+* provide Kernel sopport
+* Cross compile the FUSE library and LZ library
+* statically cross compile the main program
+* adb push and mode change
+
 ## Project Goals
 * Faster speed.
 * Simpler & smaller footprint.
