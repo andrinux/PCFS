@@ -16,7 +16,7 @@
 	if(DEBUG) {\
 	if (err != Z_OK) { \
 	fprintf(stderr, "%s error: %d\n", msg, err); \
-	exit(1); \
+	/*exit(1);*/ \
 	} \
 	}\
 }
@@ -41,6 +41,44 @@ int check_and_flush(int *lastSize, int *curSize, unsigned char* lastBuf,
 	unsigned char* curBuf, FILE* pOut);
 int flush_page(unsigned char* Buf, int size, FILE* pOut, int type);
 int set_flag(unsigned char * wrBuf, int blk);
+int write_file(FILE *pOut, unsigned char *mark, unsigned char *wrBuf, int blk);
+
+int try_decomp_W(unsigned char* inBuf);
+
+int try_decomp_W(unsigned char* inBuf){
+	z_stream t_strm;
+	int ret=0;
+	int lastOut = 0;
+	unsigned char * out = (unsigned char *) calloc
+						(2*PAGE_SIZE, sizeof(unsigned char));
+
+	t_strm.zalloc = Z_NULL;
+	t_strm.zfree = Z_NULL;
+	t_strm.opaque = (voidpf)0;
+	t_strm.avail_in = 0;
+	t_strm.next_in = Z_NULL;
+
+	ret = inflateInit(&t_strm);
+	CHECK_ERR(ret, "inflateInit");
+
+	//compressed data is already stored in 'inBuf'
+	t_strm.avail_in = PAGE_SIZE;
+	t_strm.next_in = (z_const unsigned char *) inBuf; // start point
+	t_strm.next_out = out;
+	t_strm.avail_out = 2*PAGE_SIZE;
+
+
+	while(t_strm.total_out < 2*PAGE_SIZE ){
+		ret = inflate(&t_strm, Z_NO_FLUSH);
+		if(t_strm.total_out == lastOut)
+			break;
+		lastOut=t_strm.total_out;
+	}
+	ret = inflateEnd(&t_strm);
+	CHECK_ERR(ret, "inflateEnd");
+
+	return ret;
+}
 
 //======================Compress buf to target=============
 // Given: buf and size
@@ -58,18 +96,21 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 	unsigned char lastBuf[OUT_BUF_SIZE];
 	unsigned char outBuf[OUT_BUF_SIZE];
 
-	c_stream.zalloc = Z_NULL;
-	c_stream.zfree = Z_NULL;
-	c_stream.opaque = (voidpf)0;
+	int total_In = 0, Avail_In = 0;
+	// unsigned char * curPos_In = NULL; //current input segment pos.
+	
+	while(total_In < len){
 
-	err = deflateInit(&c_stream, Z_DEFAULT_COMPRESSION);
-	CHECK_ERR(err, "deflateInit");
+		// Initializing Segments
+		c_stream.zalloc = Z_NULL;
+		c_stream.zfree = Z_NULL;
+		c_stream.opaque = (voidpf)0;
 
-	c_stream.next_in  = (z_const unsigned char *)buf; 
+		err = deflateInit(&c_stream, Z_DEFAULT_COMPRESSION);
+		CHECK_ERR(err, "deflateInit");
 
-	while(c_stream.total_in < len){
-		// no need to set next_in, it will be updated itself.
-
+		c_stream.next_in  = (z_const unsigned char *)buf + total_In; 
+		
 		memset(outBuf, 0, OUT_BUF_SIZE);
 		c_stream.next_out = outBuf;
 		c_stream.avail_in = PAGE_SIZE;
@@ -77,12 +118,19 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 		// call deflate, Z_FULL_FLUSH is to reset the dict each time.
 		err = deflate(&c_stream, Z_FULL_FLUSH);
 		CHECK_ERR(err, "deflate");
-		curSize = c_stream.total_out-lastTotal;
+		curSize = c_stream.total_out;
+		total_In += c_stream.total_in;
 		if(DEBUG)	printf("[C] Compressed size is: %d. \n", curSize);
+
+		try_decomp_W(outBuf);
+
 		//Flush to file.
 		check_and_flush(&lastSize, &curSize, lastBuf, outBuf, pOut);
 		//need to reset lastTotal to calculate the compressed seg size each time
 		lastTotal = c_stream.total_out;
+		//check the potential errors:
+		err = deflateEnd(&c_stream);
+		CHECK_ERR(err, "deflateEnd");
 	}
 	//Still need to check the last un-flushed one.
 	if(lastSize || curSize){
@@ -92,13 +140,12 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 
 	write_file(pOut, mark, wrBuf, blk);
 	if(DEBUG) printf("Total effective bit written into file: %d, total compressed is: %d\n", 
-						totalW, c_stream.total_out);
-	//check the potential errors:
-	err = deflateEnd(&c_stream);
-	CHECK_ERR(err, "deflateEnd");
-		
+						totalW, lastTotal);
+	
 	return ret;
 }
+
+
 
 
 int check_and_flush(int *lastSize, int *curSize,  unsigned char* lastBuf, 
