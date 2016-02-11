@@ -1,7 +1,7 @@
-/************************************************************************/
+/************************* Write ***********************************************/
 /*  This file is used to prototype the basic function of PCFS: */
 /*  4kB compression and 4kB Packing                            */
-/*	Using deflate() and inflate() with z_stream structure. */
+/*	Using deflate() with z_stream structure. */
 /************************************************************************/
 
 
@@ -30,6 +30,7 @@
 
 int totalW = 0;
 unsigned char * wrBuf;
+unsigned char * mark;
 int blk = 0;
 
 /*
@@ -82,16 +83,16 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 		check_and_flush(&lastSize, &curSize, lastBuf, outBuf, pOut);
 		//need to reset lastTotal to calculate the compressed seg size each time
 		lastTotal = c_stream.total_out;
-	} 
+	}
 	//Still need to check the last un-flushed one.
 	if(lastSize || curSize){
 		if(DEBUG) printf("[Warning!] the last piece left.\n");
 		flush_page(lastBuf, lastSize, pOut, 0);
 	}
 
+	write_file(pOut, mark, wrBuf, blk);
 	if(DEBUG) printf("Total effective bit written into file: %d, total compressed is: %d\n", 
 						totalW, c_stream.total_out);
-	
 	//check the potential errors:
 	err = deflateEnd(&c_stream);
 	CHECK_ERR(err, "deflateEnd");
@@ -99,11 +100,13 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 	return ret;
 }
 
+
 int check_and_flush(int *lastSize, int *curSize,  unsigned char* lastBuf, 
 	unsigned char* curBuf, FILE* pOut)
 {
 	int ret = 0;
 	unsigned char outBuf[PAGE_SIZE];
+	memset(outBuf, 0, PAGE_SIZE);// clean up
 	//Four cases.
 	if((*curSize) > PAGE_SIZE){
 		flush_page(lastBuf, *lastSize, pOut, 0);
@@ -118,10 +121,10 @@ int check_and_flush(int *lastSize, int *curSize,  unsigned char* lastBuf,
 		(*lastSize)=(*curSize);
 		memset(curBuf, 0, OUT_BUF_SIZE);
 		*curSize = 0;
-	}else if(*lastSize == 0){
-		memcpy(lastBuf, curBuf, *curSize);
+	}else if((*lastSize) == 0){
+		memcpy(lastBuf, curBuf, OUT_BUF_SIZE);
 		*lastSize = *curSize;
-		memset(curBuf, 0, *curSize);
+		memset(curBuf, 0, OUT_BUF_SIZE);
 		*curSize = 0;
 	}else{
 		//combine two pages. copy cur to last, will flush next time.
@@ -147,27 +150,37 @@ int flush_page(unsigned char* Buf, int size, FILE* pOut, int type)
 	}
 	if(DEBUG) printf("[W] %d data written into file.\n", size);
 	totalW += size;
-	fwrite (Buf , sizeof(char), PAGE_SIZE, pOut);
-	memcpy(wrBuf + PAGE_SIZE*blk, Buf, PAGE_SIZE); 
+	//fwrite (Buf , sizeof(char), PAGE_SIZE, pOut);
+	memset(wrBuf+blk*PAGE_SIZE, 0, PAGE_SIZE); // <- clean up the output buffer.
+	memcpy(wrBuf+blk*PAGE_SIZE , Buf, PAGE_SIZE); // <- update the start location each time!
 	//set the mark(as metadata)
 	if(type) 
-		set_flag(wrBuf, blk);
+		set_flag(mark, blk);
 	blk++;
 	return ret;
 }
 
-int set_flag(unsigned char * wrBuf, int blk)
+int write_file(FILE *pOut, unsigned char *mark, unsigned char *wrBuf, int blk)
+{
+	int ret = 0;
+	fwrite (mark , sizeof(char), PAGE_SIZE, pOut);
+	// TODO: has redundancy bits following here
+	fwrite (wrBuf , sizeof(char), blk*PAGE_SIZE, pOut);
+	return ret;
+}
+
+int set_flag(unsigned char * mBuf, int blk)
 {
 	int ret = 0;
 	int byte = blk / 8;
 	int offset = blk % 8;
 	char mask = 0x80 >> offset;
-	*(wrBuf+byte) = *(wrBuf+byte) | mask;
+	*(mBuf+byte) = *(mBuf+byte) | mask;
 	return ret;
 }
 
 //===================Main Function of Test ================
-int main()
+int main_W()
 {
 	unsigned char* buf;
 
@@ -186,7 +199,9 @@ int main()
 	fseek ( pIn , 0 , SEEK_SET );
 	//read all data into -buf-
 	buf = (unsigned char*) malloc( tLen*sizeof(unsigned char));
-	wrBuf = (unsigned char*) calloc( (PAGE_SIZE+ tLen), sizeof(unsigned char));
+	wrBuf = (unsigned char*) calloc(  tLen, sizeof(unsigned char));
+	memset(wrBuf, 0, PAGE_SIZE);
+	mark=(unsigned char *) calloc(PAGE_SIZE, sizeof(unsigned char));
 	if( tLen != fread(buf, 1, tLen, pIn))
 		printf("ERR: cannot read input file.\n");
 
