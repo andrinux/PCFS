@@ -1,6 +1,6 @@
-/************************* Write ***********************************************/
+/************************* Read ***********************************************/
 /*  This file is used to prototype the basic function of PCFS: */
-/*  4kB compression and 4kB Packing                            */
+/*  Read out the data according to the reqSize                 */
 /*	Using deflate() with z_stream structure. */
 /************************************************************************/
 
@@ -55,19 +55,21 @@ int try_decomp(unsigned char* inBuf){
 
 	//compressed data is already stored in 'inBuf'
 	t_strm.avail_in = PAGE_SIZE;
-	t_strm.next_in = (z_const unsigned char *) inBuf + 1893; // start point
+	t_strm.next_in = (z_const unsigned char *) inBuf; // start point
 	t_strm.next_out = out;
 	t_strm.avail_out = 2*PAGE_SIZE;
 
 
 	while(t_strm.total_out < 2*PAGE_SIZE ){
 		 ret = inflate(&t_strm, Z_NO_FLUSH);
+		 CHECK_ERR(ret, "Try: inflate");
 		 if(t_strm.total_out == lastOut)
 			 break;
 		 lastOut=t_strm.total_out;
 	}
 	ret = inflateEnd(&t_strm);
-	CHECK_ERR(ret, "inflateEnd");
+	CHECK_ERR(ret, "Try: inflateEnd");
+	free(out);
 
 	return ret;
 }
@@ -76,34 +78,47 @@ int try_decomp(unsigned char* inBuf){
 int decompress_page_1(unsigned char *start_In, unsigned char *start_Out, int *blk, int *pages)
 {
 	int outByte = 0;
-	z_stream d_stream;
-
-	int err = 0;
+	z_stream t_strm;
+	int ret = 0;
 	//initialize inflate()
-	d_stream.zalloc = Z_NULL;
-	d_stream.zfree = Z_NULL;
-	d_stream.opaque = (voidpf)0;
-	d_stream.avail_in = 0;
-	d_stream.next_in = Z_NULL;
+	int lastOut = 0;
 
-	err = inflateInit(&d_stream);
-	CHECK_ERR(err, "inflateInit");
+	//try_decomp(start_In);
 
-	d_stream.avail_in = PACK_SIZE;
-	d_stream.next_in = start_In; // start point
-	d_stream.next_out = start_Out;
-	d_stream.avail_out = PACK_SIZE;
-	
-	//do decompression.
-	err = inflate(&d_stream, Z_NO_FLUSH);
-	CHECK_ERR(err, "inflate");
+	unsigned char * out =(unsigned char *) calloc(2*PAGE_SIZE, sizeof(unsigned char));
 
-	outByte = d_stream.total_out;
+	t_strm.zalloc = Z_NULL;
+	t_strm.zfree = Z_NULL;
+	t_strm.opaque = (voidpf)0;
+	t_strm.avail_in = 0;
+	t_strm.next_in = Z_NULL;
+
+	ret = inflateInit(&t_strm);
+	CHECK_ERR(ret, "inflateInit");
+
+	//compressed data is already stored in 'inBuf'
+	t_strm.avail_in = PAGE_SIZE;
+	t_strm.next_in = (z_const unsigned char *) start_In; // start point
+	t_strm.next_out = out;
+	t_strm.avail_out = 2*PAGE_SIZE;
+
+
+	while(t_strm.total_out < 2*PAGE_SIZE ){
+		 ret = inflate(&t_strm, Z_NO_FLUSH);
+		 CHECK_ERR(ret, "inflate");
+		 if(t_strm.total_out == lastOut)
+			 break;
+		 lastOut=t_strm.total_out;
+	}
+	ret = inflateEnd(&t_strm);
+	CHECK_ERR(ret, "inflateEnd");
+	free(out);
+
+	memcpy(start_Out, out, t_strm.total_out);
+	outByte=t_strm.total_out;
 
 	(*blk)++;
 	(*pages) = (*pages) + 1;
-	err = inflateEnd(&d_stream);
-	CHECK_ERR(err, "inflateEnd");
 
 	return outByte;
 }
@@ -197,7 +212,7 @@ int testDecompress(FILE *pIn, FILE *pOut, unsigned char *rdBuf, uLong reqSize )
 		printf("ERR: cannot read data in input file.\n");
 
 	/************************************************************************/
-	try_decomp(inBuf);
+	//try_decomp(inBuf);
 	//decompress_page_2(inBuf, rdBuf, &blk, &pages);
 	/************************************************************************/
 
