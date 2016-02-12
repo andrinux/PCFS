@@ -90,13 +90,13 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 	int err;
 	uLong len = size;
 	uLong lastTotal=0;
-	int blkCnt = (size%PAGE_SIZE == 0) ? (size/PAGE_SIZE-1):(size/PAGE_SIZE);
+	//int blkCnt = (size%PAGE_SIZE == 0) ? (size/PAGE_SIZE-1):(size/PAGE_SIZE);
 
 	int curSize = 0, lastSize = 0;
 	unsigned char lastBuf[OUT_BUF_SIZE];
 	unsigned char outBuf[OUT_BUF_SIZE];
 
-	int total_In = 0, Avail_In = 0;
+	int total_In = 0;
 	// unsigned char * curPos_In = NULL; //current input segment pos.
 	
 	while(total_In < len){
@@ -114,13 +114,15 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 		memset(outBuf, 0, OUT_BUF_SIZE);
 		c_stream.next_out = outBuf;
 		c_stream.avail_in = PAGE_SIZE;
-
+		c_stream.avail_out = PAGE_SIZE;
+		
 		// call deflate, Z_FULL_FLUSH is to reset the dict each time.
 		err = deflate(&c_stream, Z_FULL_FLUSH);
 		CHECK_ERR(err, "deflate");
 		curSize = c_stream.total_out;
 		total_In += c_stream.total_in;
-		if(DEBUG)	printf("[C] Compressed size is: %d. \n", curSize);
+		if(DEBUG)	
+			printf("[C] Compressed size is: %d. \n", curSize);
 
 		try_decomp_W(outBuf);
 
@@ -139,7 +141,7 @@ int testCompress(FILE* pIn, FILE *pOut, const void* buf, size_t size)
 	}
 
 	write_file(pOut, mark, wrBuf, blk);
-	if(DEBUG) printf("Total effective bit written into file: %d, total compressed is: %d\n", 
+	if(DEBUG) printf("Total effective bit written into file: %d, total compressed is: %ld\n", 
 						totalW, lastTotal);
 	
 	return ret;
@@ -227,17 +229,16 @@ int set_flag(unsigned char * mBuf, int blk)
 }
 
 //===================Main Function of Test ================
-int main_W()
+int main()
 {
 	unsigned char* buf;
-
-	const char * in = "./Traces.log";
-	const char * out = "./cTrace.bin";
 
 	FILE *pIn = fopen("./Traces.log", "rb");
 	FILE *pOut = fopen("./cTrace.bin", "wb");
 
 	uLong tLen = 0;
+
+	printf("ZLIB VERSION: %s", ZLIB_VERSION);
 
 	if(pIn == NULL) printf("ERR: Cannot open input file.\n");
 	if(pOut == NULL) printf("ERR: Cannot open output file.\n");
@@ -245,7 +246,7 @@ int main_W()
 	tLen = ftell(pIn);
 	fseek ( pIn , 0 , SEEK_SET );
 	//read all data into -buf-
-	buf = (unsigned char*) malloc( tLen*sizeof(unsigned char));
+	buf = (unsigned char*) malloc( tLen * sizeof(unsigned char));
 	wrBuf = (unsigned char*) calloc(  tLen, sizeof(unsigned char));
 	memset(wrBuf, 0, PAGE_SIZE);
 	mark=(unsigned char *) calloc(PAGE_SIZE, sizeof(unsigned char));
@@ -254,6 +255,9 @@ int main_W()
 
 	testCompress(pIn, pOut,buf, tLen );
 
+	free(buf); free(wrBuf);
+	free(mark);
 	fclose(pIn); fclose(pOut);
+
 	return 0;
 }
