@@ -31,6 +31,10 @@ $ cp ~/Trace.log ~/testDir
 $ du -h ~/Trace.log
 $ du -h ~/testDir/Trace.log
 ~~~~~
+* if you don't want to use `Makefile`, the you can try this command to compile:
+~~~~~
+$ gcc -D_FILE_OFFSET_BITS=64 -I/usr/include/  -lfuse -pthread  -L/usr/lib  *.c -o PCFS -D_FILE_OFFET_BITS=64  -lfuse -lrt -ldl -lz
+~~~~~
 
 ## Migrate to Android
 * provide Kernel sopport
