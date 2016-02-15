@@ -1,7 +1,8 @@
 /*
-* Core file of PCFS: Pagelevel Compression File System
+* Core file of Compression File system.
 * This is the core file containing the implementations of callback functions.
-* Each Functions must be fully implemented in cases of various calling in Apps.
+* 
+* This project used ext4's read/write function and use zlib to do the compression.
 */
 
 
@@ -48,10 +49,13 @@
 #include "file.h"
 #include "direct_compress.h"
 #include "background_compress.h"
+#include "compress_RW.h"
 
 
 static char DOT = '.';
 static int cmpdirFd;	// Open fd to cmpdir for fchdir.
+extern unsigned char * wrBuf;
+extern unsigned char * mark;
 
 //Get the file size given a const char path.
 //off_t is defined as long int.
@@ -86,7 +90,7 @@ static int PCFS_getattr(const char *path, struct stat *stbuf)
 
 	DEBUG_("('%s')", full);
 
-	/* check for magic file */
+	// check for magic file 
 	if (full[0] == '_' && full[1] == 'f' && full[2] == 'c') {
 			return -EINVAL;
 	}
@@ -145,8 +149,6 @@ static int PCFS_getattr(const char *path, struct stat *stbuf)
 	// (tar checks this item and it is loudly when the result
 	// is different than what it exepects)
 	//
-	/* seems to be incorrect, see issue #36 */
-	/* stbuf->st_ctime = stbuf->st_mtime; */
 
 	UNLOCK(&file->lock);
 	return 0;
@@ -565,7 +567,7 @@ static int PCFS_open(const char *path, struct fuse_file_info *fi)
 		//exit(EXIT_FAILURE);
 		return -ENOMEM;
 	}
-	//XZ: what is direct_open used for?
+	//create file struct
 	file = direct_open(full, TRUE);
 
 	// if user wants to open file in O_WRONLY, we must open file for reading too
@@ -710,7 +712,7 @@ static int PCFS_read(const char *path, char *buf, size_t size, off_t offset, str
 }
 /**
 struct fuse_file_info {
-	/** Open flags.	 Available in open() and release() */
+	/* Open flags.	 Available in open() and release() */
 //	int flags;
 
 	/** Old file handle, don't use */
@@ -762,6 +764,7 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 	int           res;
 	file_t       *file;
 	descriptor_t *descriptor;
+	int compSize = 0;
 	DEBUG_("XZ: Write Function is triggered: Target is %s.\n", path);
 	DEBUG_("('%s') size: %zd, offset: %zd", path, size, offset);
 	STAT_(STAT_WRITE);
@@ -779,6 +782,14 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 
 	DEBUG_("offset: %zi, file->size: %zi", offset, file->size);
 
+	/*******************************************/
+	compSize = PCFS_compress(descriptor->fd, buf, size, offset);
+	
+	//Now the original buf is compressed into wrBuf and mark.
+	//then we only need to write these data into file without compression/
+	/*******************************************/
+	
+	
 	// Decide about type of compression applied to this file.
 	//
 	if ((!file->dontcompress) &&
@@ -797,8 +808,21 @@ static int PCFS_write(const char *path, const char *buf, size_t size,
 		//XZ: do the compression and write to file inside this function.
 		//XZ: The header(including flags and offsets) is generated after
 		//		compression, so we need to do compression first. 
-		res = direct_compress(file, descriptor, buf, size, offset);
+		
+		
+		//res = direct_compress(file, descriptor, buf, size, offset);
+		
 		//res= PageLevelCompression(file, descriptor, buf, size, offset);
+		// res = PCFS_compress(descriptor->fd, buf, size, offset);
+		// DEBUG_("XZ: PCFS_compress() finished. res is: %d.\n", res);
+		
+		
+		//Flush buffer:
+		int fd = descriptor->fd;
+		UNLOCK(&file->lock);
+		res = pwrite(fd, mark, PAGE_SIZE, offset);
+		res += pwrite(fd, wrBuf, compSize, offset + PAGE_SIZE);
+		LOCK(&file->lock);
 	}
 	else
 	{
@@ -1109,7 +1133,6 @@ static int set_sigterm_handler(void)
 char compresslevel[3] = "wbx";
 
 #define MAX_OPTS 50
-#if 0
 int main(int argc, char *argv[])
 {
 	int               fusec = 0;
@@ -1463,20 +1486,6 @@ trysomethingelse:
 	
 	return ret;
 }
-
-#endif
-
-int main()
-{
-	const char * srcPath = "/home/xuebinzhang/Trace.log";
-	const char * dstPath = "/home/xuebinzhang/zTrace.log";
-	const char * newPath = "/home/xuebinzhang/newTrace.log";
-	testCompress(srcPath, dstPath);
-	testDecompress(dstPath, newPath);
-	return 0;
-}
-
-
 
 
 
