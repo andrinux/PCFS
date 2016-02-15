@@ -33,6 +33,6 @@ void flush_file_cache(file_t* file);
 
 
 
-void testCompress(const char* srcPath, const char* dstPath);
-void testDecompress(const char* srcPath, const char* dstPath);
+//void testCompress(const char* srcPath, const char* dstPath);
+//void testDecompress(const char* srcPath, const char* dstPath);
 #endif

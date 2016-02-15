@@ -229,7 +229,7 @@ size_t doPageLevelCompression(Blk_t* tBUF, Blk_t* fBUF, uchar* Flags, ushort* Of
 	}
 	//the final page. could be compressed or not.
 	//copy directly.
-	if(cur == count-1){
+	if(cur == count - 1){
 		curBlk = fBUF + fCnt;
 		memcpy(curBlk->dst, tBUF[cur].dst, tBUF[cur].dst_len);
 		Flags[fCnt] = tBUF[cur].flag;
@@ -350,11 +350,6 @@ int PageLevelDecompression(file_t *file, descriptor_t *descriptor, void *outbuf,
 
 
 
-/*  MAX_DATABASE_LEN = When the database has this many entries, we clean the database
-
-    Note that these are soft targets and can grow over these sizes if you have a ton of open files.
-    Making these big will only slow us down, as we have to scan through the entire database on new files.
-*/
 #define MAX_DATABASE_LEN 30
 
 void flush_file_cache(file_t* file)
